@@ -1,10 +1,115 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import tips from './tips';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import './App.css';
+import {sortAs} from 'react-pivottable/Utilities';
+import TableRenderers from 'react-pivottable/TableRenderers';
+import createPlotlyComponent from 'react-plotly.js/factory';
+import createPlotlyRenderers from 'react-pivottable/PlotlyRenderers';
+import PivotTableUI from 'react-pivottable/PivotTableUI';
+import AnyChart from 'anychart-react/dist/anychart-react.min.js'
+import 'react-pivottable/pivottable.css';
+import Dropzone from 'react-dropzone'
+import Papa from 'papaparse'
+import anychart from 'anychart'
 
-class App extends Component {
+const Plot = createPlotlyComponent(window.Plotly);
+
+class PivotTableUISmartWrapper extends React.PureComponent {
+    constructor(props) {
+        super(props)
+        this.state = { pivotState: props, barchart:[] };
+    }
+
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({pivotState: nextProps});
+    }
+
+    render() {
+        return <PivotTableUI
+            renderers={Object.assign({}, TableRenderers, createPlotlyRenderers(Plot))}
+            {...this.state.pivotState} onChange={s => this.setState({pivotState: s})}
+            unusedOrientationCutoff={Infinity}
+             />;
+    }
+}
+
+
+export default class App extends React.Component {
+  componentWillMount() {
+      this.setState({
+          mode: "demo",
+          filename: "Sample Dataset: Tips",
+          pivotState: {
+              data: tips,
+              rows: ["Payer Gender"], cols: ["Party Size"],
+              aggregatorName: "Sum over Sum", vals: ["Tip", "Total Bill"],
+              rendererName: "Grouped Column Chart",
+              sorters: {
+                  "Meal": sortAs(["Lunch", "Dinner"]),
+                  "Day of Week": sortAs(["Thursday", "Friday", "Saturday", "Sunday"])},
+              plotlyOptions: {width: 900, height: 500}
+          }
+      });
+  }
+
+  onDrop(files) {
+      this.setState({
+          mode: "thinking",
+          filename: "(Parsing CSV...)",
+          textarea: "",
+          pivotState: { data: [] }
+      }, () => Papa.parse(files[0], {
+          skipEmptyLines: true,
+          error: (e) => alert(e),
+          complete: (parsed) => {
+            this.setState({
+              mode: "file",
+              filename: files[0].name,
+              pivotState: { data: parsed.data }
+          })
+          this.plotBarChart(parsed.data)
+          } 
+        })
+      );
+  }
+  plotBarChart=(pivotState)=>{
+    let salesData = []
+    for(let i=0; i<10; i++){
+      let data = [];
+      console.log(pivotState[i])
+      data = [pivotState[i][2],pivotState[i][17]]
+      salesData.push(data);
+    }
+    var salesDataTable = anychart.data.table();
+    salesDataTable.addData(salesData); 
+    // var secondPlot = chart.plot(0);
+    // secondPlot.splineArea(salesDataTable.mapAs({'value': 4})).fill('#1976d2 0.65').stroke('1.5 #1976d2').name('Sales');
+    this.setState({
+      barchart: salesData
+    })
+  }
+
+  onType(event) {
+      Papa.parse(event.target.value, {
+          skipEmptyLines: true,
+          error: (e) => alert(e),
+          complete: (parsed) => {
+          this.setState({
+              mode: "text",
+              filename: "Data from <textarea>",
+              textarea: event.target.value,
+              pivotState: { data: parsed.data },
+          })
+
+          this.plotBarChart(parsed.data)
+          console.log(parsed)
+        }
+      });
+  }
   render() {
     return (
       <div>
@@ -30,10 +135,10 @@ class App extends Component {
 <div className="col-lg-3 menu-dashboard-panel no-print ">
     <div className="menu-wrapper">
         <ul className="list-unstyled">
-            <li><a className="general active" onclick="changeTab('general')">Upload Data <i className="fa fa-bookmark"></i></a></li>
-            <li><a className="products " onclick="changeTab('products')">Sales by Origin <i className="fa fa-shopping-cart"></i></a></li>
-            <li><a className="sales-team " onclick="changeTab('sales-team')">Sales Team Rate <i className="fa fa-user"></i></a></li>
-            <li><a className="regions " onclick="changeTab('regions')"> Sales by Region <i className="fa fa-map-marker"></i></a></li>
+            <li><a className="general active" onClick="changeTab('general')">Upload Data <i className="fa fa-bookmark"></i></a></li>
+            <li><a className="products " onClick="changeTab('products')">Sales charts <i className="fa fa-shopping-cart"></i></a></li>
+            <li><a className="sales-team " onClick="changeTab('sales-team')">Sales Team Rate <i className="fa fa-user"></i></a></li>
+            <li><a className="regions " onClick="changeTab('regions')"> Region Charts<i className="fa fa-map-marker"></i></a></li>
         </ul>
         <hr/>
         <ul className="period-selector list-unstyled">
@@ -69,19 +174,30 @@ class App extends Component {
 
 
         <div className="col-lg-8 col-lg-offset-3 dashboard-limitation no-padding content">
-            <div className="tab-pane active" id="spinner">
-                <p className="text-center loader-text">
-                    <span><i className="fa fa-spinner fa-spin"></i></span> loading ...
-                </p>
-            </div>
-
-            <div className="tab-pane" id="general">
-                <div className="col-sm-12 no-padding">
-                    <div className="chart-block">
-                        <h2 className="chart-title">Revenue</h2>
-                        <div id="general-revenue-chart" className="chart" data-height="250"></div>
+            
+        <div className="col-sm-8 no-padding">
+                  <div className="row text-center">
+                    <div>
+                    <p>Try it right now on a file...</p>
+                    <Dropzone onDrop={this.onDrop.bind(this)} accept="text/csv" className="dropzone"
+                    activeClassName="dropzoneActive" rejectClassName="dropzoneReject" >
+                        <p>Drop a CSV file here, or click to choose a file from your computer.</p>
+                    </Dropzone>
                     </div>
-                </div>
+                    <div >
+                    <p>...or paste some data:</p>
+                    <textarea value={this.state.textarea} onChange={this.onType.bind(this)}
+                        placeholder="Paste from a spreadsheet or CSV-like file"/>
+                    </div>
+                  </div>
+
+            <div className="row">
+                <h2 className="text-center">{this.state.filename}</h2>
+                <br />
+                <PivotTableUISmartWrapper {...this.state.pivotState} />
+            </div>
+            <div className="tab-pane" id="general">
+                
             </div>
             <div className="tab-pane" id="products">
                 <div className="col-lg-6 col-sm-6 no-padding">
@@ -321,9 +437,6 @@ class App extends Component {
                                 details <a href="https://www.anychart.com/buy/" target="_blank">here</a>.
                             </li>
                         </ul>
-
-                        <p>If you have any questions regarding licensing - please contact us. <a
-                                href="mailto:sales@anychart.com">sales@anychart.com</a></p>
                     </div>
                 </div>
             </div>
@@ -332,8 +445,7 @@ class App extends Component {
       </div>
       </div>
       </div>
+      </div>
     );
   }
 }
-
-export default App;
