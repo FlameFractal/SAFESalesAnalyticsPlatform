@@ -9,11 +9,215 @@ import TableRenderers from 'react-pivottable/TableRenderers';
 import createPlotlyComponent from 'react-plotly.js/factory';
 import createPlotlyRenderers from 'react-pivottable/PlotlyRenderers';
 import PivotTableUI from 'react-pivottable/PivotTableUI';
-import AnyChart from 'anychart-react/dist/anychart-react.min.js'
+import AnyChart from 'anychart-react/dist/anychart-react.min.js';
 import 'react-pivottable/pivottable.css';
-import Dropzone from 'react-dropzone'
-import Papa from 'papaparse'
-import anychart from 'anychart'
+import Dropzone from 'react-dropzone';
+import Papa from 'papaparse';
+import anychart from 'anychart';
+
+var colorScale = anychart.scales.ordinalColor([{less:10,color:'#EC6E07'},{from:20, to:30, color:'#A1958A'},{greater:30, color:'#64B5F6'}])
+
+var dataSet = anychart.data.set([{
+        'id': 'US.MA',
+        'value': 0
+    },
+    {
+        'id': 'US.MN',
+        'value': 1
+    },
+    {
+        'id': 'US.MT',
+        'value': 2
+    },
+    {
+        'id': 'US.ND',
+        'value': 3
+    },
+    {
+        'id': 'US.HI',
+        'value': 4
+    },
+    {
+        'id': 'US.ID',
+        'value': 5
+    },
+    {
+        'id': 'US.WA',
+        'value': 6
+    },
+    {
+        'id': 'US.AZ',
+        'value': 7
+    },
+    {
+        'id': 'US.CA',
+        'value': 8
+    },
+    {
+        'id': 'US.CO',
+        'value': 9
+    },
+    {
+        'id': 'US.NV',
+        'value': 10
+    },
+    {
+        'id': 'US.NM',
+        'value': 11
+    },
+    {
+        'id': 'US.OR',
+        'value': 12
+    },
+    {
+        'id': 'US.UT',
+        'value': 13
+    },
+    {
+        'id': 'US.WY',
+        'value': 14
+    },
+    {
+        'id': 'US.AR',
+        'value': 15
+    },
+    {
+        'id': 'US.IA',
+        'value': 16
+    },
+    {
+        'id': 'US.KS',
+        'value': 17
+    },
+    {
+        'id': 'US.MO',
+        'value': 18
+    },
+    {
+        'id': 'US.NE',
+        'value': 19
+    },
+    {
+        'id': 'US.OK',
+        'value': 20
+    },
+    {
+        'id': 'US.SD',
+        'value': 21
+    },
+    {
+        'id': 'US.LA',
+        'value': 22
+    },
+    {
+        'id': 'US.TX',
+        'value': 23
+    },
+    {
+        'id': 'US.CT',
+        'value': 24
+    },
+    {
+        'id': 'US.NH',
+        'value': 25
+    },
+    {
+        'id': 'US.RI',
+        'value': 26
+    },
+    {
+        'id': 'US.VT',
+        'value': 27
+    },
+    {
+        'id': 'US.AL',
+        'value': 28
+    },
+    {
+        'id': 'US.FL',
+        'value': 29
+    },
+    {
+        'id': 'US.GA',
+        'value': 30
+    },
+    {
+        'id': 'US.MS',
+        'value': 31
+    },
+    {
+        'id': 'US.SC',
+        'value': 32
+    },
+    {
+        'id': 'US.IL',
+        'value': 33
+    },
+    {
+        'id': 'US.IN',
+        'value': 34
+    },
+    {
+        'id': 'US.KY',
+        'value': 35
+    },
+    {
+        'id': 'US.NC',
+        'value': 36
+    },
+    {
+        'id': 'US.OH',
+        'value': 37
+    },
+    {
+        'id': 'US.TN',
+        'value': 38
+    },
+    {
+        'id': 'US.VA',
+        'value': 39
+    },
+    {
+        'id': 'US.WI',
+        'value': 40
+    },
+    {
+        'id': 'US.WV',
+        'value': 41
+    },
+    {
+        'id': 'US.DE',
+        'value': 42
+    },
+    {
+        'id': 'US.MD',
+        'value': 43
+    },
+    {
+        'id': 'US.NJ',
+        'value': 44
+    },
+    {
+        'id': 'US.NY',
+        'value': 45
+    },
+    {
+        'id': 'US.PA',
+        'value': 46
+    },
+    {
+        'id': 'US.ME',
+        'value': 47
+    },
+    {
+        'id': 'US.MI',
+        'value': 48
+    },
+    {
+        'id': 'US.AK',
+        'value': 49
+    }
+]);
 
 const Plot = createPlotlyComponent(window.Plotly);
 
@@ -42,6 +246,7 @@ export default class App extends React.Component {
   componentWillMount() {
       this.setState({
           mode: "demo",
+          tab:0,
           filename: "Sample Dataset: Tips",
           pivotState: {
               data: tips,
@@ -110,6 +315,11 @@ export default class App extends React.Component {
         }
       });
   }
+  changeTab(tab){
+      this.setState({
+          tab:tab
+      })
+  }
   render() {
     return (
       <div>
@@ -117,7 +327,7 @@ export default class App extends React.Component {
       <div className="row title-dashboard-panel">
           <div className="col-lg-8 col-lg-offset-3 dashboard-limitation">
               <h1 className="title">
-                  <a className="hidden-lg switcher" onclick="showBars(true)"><i className="fa fa-bars"></i></a>
+                  <a className="hidden-lg switcher" ><i className="fa fa-bars"></i></a>
                   Sales Dashboard <span className="bright-text">"SAFE Sales Dashboard"</span>
 
                   <div className="btn-group pull-right submenu">
@@ -132,16 +342,17 @@ export default class App extends React.Component {
           </div>
       </div>
 
-<div className="col-lg-3 menu-dashboard-panel no-print ">
+<div className="container-fluid">
+<div className="row">
+<div className="col-lg-3 no-print">
     <div className="menu-wrapper">
         <ul className="list-unstyled">
-            <li><a className="general active" onClick="changeTab('general')">Upload Data <i className="fa fa-bookmark"></i></a></li>
-            <li><a className="products " onClick="changeTab('products')">Sales charts <i className="fa fa-shopping-cart"></i></a></li>
-            <li><a className="sales-team " onClick="changeTab('sales-team')">Sales Team Rate <i className="fa fa-user"></i></a></li>
-            <li><a className="regions " onClick="changeTab('regions')"> Region Charts<i className="fa fa-map-marker"></i></a></li>
+            <li><a className={this.state.tab===0?"general active":"general"} onClick={()=>this.changeTab(0)}>Upload Data <i className="fa fa-bookmark"></i></a></li>
+            <li><a className={this.state.tab===1?"products active":"products"} onClick={()=>this.changeTab(1)}>Sales charts <i className="fa fa-shopping-cart"></i></a></li>
+            <li><a className={this.state.tab===2?"sales-team active":"sales-team"} onClick={()=>this.changeTab(2)}>Sales Team Rate <i className="fa fa-user"></i></a></li>
+            <li><a className={this.state.tab===3?"regions active":"regions"} onClick={()=>this.changeTab(3)}>Region Charts<i className="fa fa-map-marker"></i></a></li>
         </ul>
-        <hr/>
-        <ul className="period-selector list-unstyled">
+        {/*<ul className="period-selector list-unstyled">
             <li><label for="option-1">
                 <span>WTD</span>
                 <input type="radio" id="option-1" name="options" value="WTD" onclick="changeData('WTD')"/>
@@ -162,139 +373,120 @@ export default class App extends React.Component {
                 <span>All Time</span>
                 <input type="radio" id="option-5" name="options" value="all" onclick="changeData('all')"/>
             </label></li>
-        </ul>
-        <hr/>
+    </ul>*/}
         <div className="divider"></div>
     </div>
 
 </div>
 
-<div className="container-fluid">
-    <div className="row">
+    {this.state.tab===0?
+    <div className="col-lg-8 dashboard-limitation no-padding content">
+                <div className="row text-center">
+                <p>Try it right now on a file...</p>
+                <Dropzone onDrop={this.onDrop.bind(this)} accept="text/csv" className="dropzone"
+                activeClassName="dropzoneActive" rejectClassName="dropzoneReject" >
+                    <p>Drop a CSV file here, or click to choose a file from your computer.</p>
+                </Dropzone>
+                <div >
+                <p>...or paste some data:</p>
+                <textarea value={this.state.textarea} onChange={this.onType.bind(this)}
+                    placeholder="Paste from a spreadsheet or CSV-like file"/>
+                </div>
+                </div>
 
+        
+    </div>:''}
+    {this.state.tab===1?
 
-        <div className="col-lg-8 col-lg-offset-3 dashboard-limitation no-padding content">
-            
-        <div className="col-sm-8 no-padding">
-                  <div className="row text-center">
-                    <div>
-                    <p>Try it right now on a file...</p>
-                    <Dropzone onDrop={this.onDrop.bind(this)} accept="text/csv" className="dropzone"
-                    activeClassName="dropzoneActive" rejectClassName="dropzoneReject" >
-                        <p>Drop a CSV file here, or click to choose a file from your computer.</p>
-                    </Dropzone>
-                    </div>
-                    <div >
-                    <p>...or paste some data:</p>
-                    <textarea value={this.state.textarea} onChange={this.onType.bind(this)}
-                        placeholder="Paste from a spreadsheet or CSV-like file"/>
-                    </div>
-                  </div>
+    <div className="col-lg-8 dashboard-limitation no-padding content">
+    <h2 className="text-center">{this.state.filename}</h2>
+    <br />
+    <div className="table-container">
+        <PivotTableUISmartWrapper {...this.state.pivotState} />
+    </div>
+    </div>:''}
+    {this.state.tab===2?
+        
+    <div className="col-md-8 col-lg-8 col-sm-12 no-padding">
+        <div className="chart-block">
+            <h2 className="chart-title">Sales Team Rating</h2>
+            <div id="sales-team-chart" data-height="500" className="chart"></div>
+        </div>
+        <div className="chart-block">
+            <h2 className="chart-title">Revenue trend for <span className="person-name"></span></h2>
+            <div id="sales-for-person" className="chart" data-height="248"></div>
+        </div>
+        <div className="row">
+            <div className="col-sm-6">
+                <div className="chart-block">
+                    <h2 className="chart-title">Share of total <br/><span className="person-name"></span></h2>
+                    <div id="total_share_for_person" className="chart" data-height="180"></div>
+                </div>
+            </div>
+            <div className="col-sm-6">
+                <div className="chart-block">
+                    <h2 className="chart-title">Win Ratio <br/> <span className="person-name"></span></h2>
+                    <div id="win_ratio_for_person" className="chart" data-height="180"></div>
+                </div>
+            </div>
+        </div>
+    </div>:''}
+    {this.state.tab===3?
+    <div className="col-md-8 col-lg-8 col-sm-12 no-padding">
+    <div className="america">
+        <AnyChart
+            width={800}
+            height={600}
+            type="choropleth"
+            colorScale={colorScale}
+            data={dataSet}
+            title="USA Census"
+            geoData="anychart.maps.united_states_of_america"
+        />
 
+        <div className="col-md-6 no-padding">
+            <div className="chart-block">
+                <h2 className="chart-title">Regional Sales Range</h2>
+                <div id="regions-chart" data-height="480" className="chart"></div>
+            </div>
+        </div>
+        <div className="col-md-6 no-padding">
             <div className="row">
-                <h2 className="text-center">{this.state.filename}</h2>
-                <br />
-                <PivotTableUISmartWrapper {...this.state.pivotState} />
-            </div>
-            <div className="tab-pane" id="general">
-                
-            </div>
-            <div className="tab-pane" id="products">
-                <div className="col-lg-6 col-sm-6 no-padding">
+                <div className="col-lg-12">
                     <div className="chart-block">
-                        <h2 className="chart-title"> Origins by Revenue </h2>
-                        <div id="category-chart" className="chart" data-height="213"></div>
-                    </div>
-                    <div className="chart-block">
-                        <h2 className="chart-title"> <span className="product-name"></span> Sales by Region</h2>
-                        <div id="category-map-chart" className="chart" data-height="250"></div>
-                    </div>
-                </div>
-                <div className="col-lg-6 col-sm-6 no-padding">
-                    <div className="chart-block">
-                        <h2 className="chart-title">Sales of <span className="category-name"></span></h2>
-                        <div id="category-products-chart" className="chart" data-height="510"></div>
-                    </div>
-                </div>
-            </div>
-            <div className="tab-pane" id="sales-team">
-                     <div className="col-md-6 no-padding">
-                         <div className="chart-block">
-                             <h2 className="chart-title">Sales Team Rating</h2>
-                             <div id="sales-team-chart" data-height="500" className="chart"></div>
-                         </div>
-                     </div>
-                     <div className="col-md-6 no-padding">
-                         <div className="row">
-                             <div className="col-lg-12 ">
-                                 <div className="chart-block">
-                                     <h2 className="chart-title">Revenue trend for <span className="person-name"></span></h2>
-                                     <div id="sales-for-person" className="chart" data-height="248"></div>
-                                 </div>
-                             </div>
-                         </div>
-                         <div className="row">
-                             <div className="col-sm-6">
-                                 <div className="chart-block">
-                                     <h2 className="chart-title">Share of total <br/><span className="person-name"></span></h2>
-                                     <div id="total_share_for_person" className="chart" data-height="180"></div>
-                                 </div>
-                             </div>
-                             <div className="col-sm-6">
-                                 <div className="chart-block">
-                                     <h2 className="chart-title">Win Ratio <br/> <span className="person-name"></span></h2>
-                                     <div id="win_ratio_for_person" className="chart" data-height="180"></div>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-            </div>
-            <div className="tab-pane" id="regions">
-                 <div className="col-md-6 no-padding">
-                     <div className="chart-block">
-                         <h2 className="chart-title">Regional Sales Range</h2>
-                         <div id="regions-chart" data-height="480" className="chart"></div>
-                     </div>
-                 </div>
-                 <div className="col-md-6 no-padding">
-                     <div className="row">
-                         <div className="col-lg-12">
-                             <div className="chart-block">
-                                 <h2 className="chart-title"> Revenue trend for
-                                     <div className="btn-group">
-                                         <button id="region-name-menu" type="button" className="btn btn-link btn-xs dropdown-toggle"
-                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                             <span className="region-name"></span> <span className="caret"></span>
-                                         </button>
-                                         <ul className="dropdown-menu"  id="region-name-menu-list"></ul>
-                                     </div>
-                                 </h2>
+                        <h2 className="chart-title"> Revenue trend for
+                            <div className="btn-group">
+                                <button id="region-name-menu" type="button" className="btn btn-link btn-xs dropdown-toggle"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span className="region-name"></span> <span className="caret"></span>
+                                </button>
+                                <ul className="dropdown-menu"  id="region-name-menu-list"></ul>
+                            </div>
+                        </h2>
 
-                                 <div id="sales-in-region-chart" className="chart" data-height="230"></div>
-                             </div>
-                         </div>
-                     </div>
-                     <div className="row">
-                         <div className="col-sm-6">
-                             <div className="chart-block">
-                                 <h2 className="chart-title"> Share of Total <br/><span className="region-name"></span></h2>
-                                 <div id="total_share" className="chart" data-height="180"></div>
-                             </div>
-                         </div>
-                         <div className="col-sm-6">
-                             <div className="chart-block">
-                                 <h2 className="chart-title">Market Share <br/><span className="region-name"></span></h2>
-                                 <div id="market_share" className="chart" data-height="180"></div>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
+                        <div id="sales-in-region-chart" className="chart" data-height="230"></div>
+                    </div>
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-sm-6">
+                    <div className="chart-block">
+                        <h2 className="chart-title"> Share of Total <br/><span className="region-name"></span></h2>
+                        <div id="total_share" className="chart" data-height="180"></div>
+                    </div>
+                </div>
+                <div className="col-sm-6">
+                    <div className="chart-block">
+                        <h2 className="chart-title">Market Share <br/><span className="region-name"></span></h2>
+                        <div id="market_share" className="chart" data-height="180"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    </div>:''}
 
-<div className="modal" id="aboutDashboardModal" tabindex="-1" role="dialog">
+<div className="modal" id="aboutDashboardModal"  role="dialog">
     <div className="modal-dialog" role="document">
         <div className="modal-content">
             <div className="modal-header">
@@ -442,6 +634,7 @@ export default class App extends React.Component {
             </div>
         </div>
 
+      </div>
       </div>
       </div>
       </div>
