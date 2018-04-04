@@ -13,9 +13,11 @@ import AnyChart from 'anychart-react/dist/anychart-react.min.js';
 import 'react-pivottable/pivottable.css';
 import Dropzone from 'react-dropzone';
 import Papa from 'papaparse';
+import axios from 'axios';
 import anychart from 'anychart';
+import ReactTable from 'react-table';
 
-var colorScale = anychart.scales.ordinalColor([{less:10,color:'#EC6E07'},{from:20, to:30, color:'#A1958A'},{greater:30, color:'#64B5F6'}])
+var colorScale = anychart.scales.linearColor('#deebf7', '#3182bd')
 
 var dataSet = anychart.data.set([{
         'id': 'US.MA',
@@ -223,10 +225,19 @@ const Plot = createPlotlyComponent(window.Plotly);
 
 class PivotTableUISmartWrapper extends React.PureComponent {
     constructor(props) {
-        super(props)
-        this.state = { pivotState: props, barchart:[] };
+        super(props);
+        this.state = { 
+            pivotState: props, 
+            barchart:[],
+            lineChart:[],
+            pieChart:[],
+            details:{
+                username:'',
+                twitter:{},
+                instagram:{}
+            } 
+        };
     }
-
 
     componentWillReceiveProps(nextProps) {
         this.setState({pivotState: nextProps});
@@ -248,6 +259,11 @@ export default class App extends React.Component {
           mode: "demo",
           tab:0,
           filename: "Sample Dataset: Tips",
+          details:{
+            username:'',
+            twitter:[],
+            instagram:[]
+          },
           pivotState: {
               data: tips,
               rows: ["Payer Gender"], cols: ["Party Size"],
@@ -283,21 +299,75 @@ export default class App extends React.Component {
   }
   plotBarChart=(pivotState)=>{
     let salesData = []
-    for(let i=0; i<10; i++){
+    for(let i=1; i<=50; i++){
       let data = [];
-      console.log(pivotState[i])
-      data = [pivotState[i][2],pivotState[i][17]]
+      
+      data = [pivotState[i][10],parseInt(pivotState[i][17])]
       salesData.push(data);
     }
+    let newStates = [];
+    salesData.map((val,i)=>{
+        if(newStates.indexOf(val[0])===-1){
+            newStates.push(val[0])
+        }
+        
+    });
+    let newSalesData = []
+    for(let j=0;j<newStates.length;j++){
+        let val = 0;
+        for(let k=0;k<salesData.length;k++){
+            if(salesData[k][0]===newStates[j]){
+                val = val + salesData[k][1]
+            }
+        }
+        newSalesData.push([newStates[j],val])
+    }
+    console.log(newSalesData)
     var salesDataTable = anychart.data.table();
-    salesDataTable.addData(salesData); 
+    salesDataTable.addData(newSalesData); 
     // var secondPlot = chart.plot(0);
     // secondPlot.splineArea(salesDataTable.mapAs({'value': 4})).fill('#1976d2 0.65').stroke('1.5 #1976d2').name('Sales');
     this.setState({
-      barchart: salesData
+      barchart: newSalesData
     })
   }
-
+  getSocialData=()=>{
+      
+      let state = this.state;
+      if(state.details.username!==''){
+        axios.get(`https://socialbearing.com/scripts/get-user.php?user=${state.details.username}`)
+        .then((response)=> {
+            state.details.twitter =[response.data]
+            this.setState(state)
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+        /*instagramAnalytics(username).then(stats => {
+            console.log(stats);
+            this.setState({
+                instagram:username
+            })
+            
+            {
+                comments: 351,
+                description: 'A wonderful description',
+                email: 'foobar@gmail.com',
+                engagement: 0.02,
+                followers: 821,
+                ...
+            }
+            
+        });*/
+    }
+  }
+  handleChange=(event)=>{
+      console.log('hey')
+      let state = this.state
+      state.details.username = event.target.value;
+      console.log(state)
+      this.setState(state)
+  }
   onType(event) {
       Papa.parse(event.target.value, {
           skipEmptyLines: true,
@@ -320,7 +390,22 @@ export default class App extends React.Component {
           tab:tab
       })
   }
+  
   render() {
+    
+      const columns = [{
+        Header: 'Screen Name',
+        accessor: 'screen_name' // String-based value accessors!
+      }, {
+        Header: 'Name',
+        accessor: 'name',
+      }, {
+        Header: 'Followers', // Required because our accessor is not a string
+        accessor: 'followers_count'
+      }, {
+        Header: 'Description', // Custom header components!
+        accessor: 'description'
+      }]
     return (
       <div>
       <div className="global-shadow"></div>
@@ -351,6 +436,8 @@ export default class App extends React.Component {
             <li><a className={this.state.tab===1?"products active":"products"} onClick={()=>this.changeTab(1)}>Sales charts <i className="fa fa-shopping-cart"></i></a></li>
             <li><a className={this.state.tab===2?"sales-team active":"sales-team"} onClick={()=>this.changeTab(2)}>Sales Team Rate <i className="fa fa-user"></i></a></li>
             <li><a className={this.state.tab===3?"regions active":"regions"} onClick={()=>this.changeTab(3)}>Region Charts<i className="fa fa-map-marker"></i></a></li>
+            <li><a className={this.state.tab===4?"regions active":"regions"} onClick={()=>this.changeTab(4)}>Social Comparison<i className="fa fa-map-marker"></i></a></li>
+
         </ul>
         {/*<ul className="period-selector list-unstyled">
             <li><label for="option-1">
@@ -408,6 +495,18 @@ export default class App extends React.Component {
     {this.state.tab===2?
         
     <div className="col-md-8 col-lg-8 col-sm-12 no-padding">
+        <div className="row">
+            <div className="col-md-5 col-lg-5 col-sm-12">
+             <AnyChart id="pie" width={400} height={500} title="Tab1 chart" type="pie" data={[5, 3, 3, 5]}/>
+            </div>
+            <div className="col-md-5 col-lg-5 col-sm-12">
+             <AnyChart id="line" width={400} height={500} title="Tab3 chart" type="line" data={"P1,5\nP2,3\nP3,6\nP4,4"}/>
+            </div>
+        </div>
+        <div className="row">
+            <AnyChart id="revenue" legend={this.state.legend} width={700} height={500} title="Revenue Chart" type="column" 
+        data={this.state.barchart}/>
+        </div>
         <div className="chart-block">
             <h2 className="chart-title">Sales Team Rating</h2>
             <div id="sales-team-chart" data-height="500" className="chart"></div>
@@ -485,6 +584,26 @@ export default class App extends React.Component {
         </div>
     </div>
     </div>:''}
+    {this.state.tab===4?
+    
+    <div className="col-md-8 col-lg-8 col-sm-12 no-padding">
+        <input onChange={this.handleChange} value={this.state.details.username} className="input" name="username" />
+        <button onClick={this.getSocialData} className="btn" >Submit</button>
+        <div className="row">
+        <div className="col-md-12 col-lg-12 col-sm-12 no-padding">
+        <h3>Twitter Profile Details</h3>
+            <ReactTable
+                defaultPageSize={1}
+                minRows={1}
+                data={this.state.details.twitter}
+                columns={columns}
+            />
+        </div>
+        <div className="col-md-12 col-lg-12 col-sm-12 no-padding">
+            
+        </div>
+        </div>
+    </div>:""}
 
 <div className="modal" id="aboutDashboardModal"  role="dialog">
     <div className="modal-dialog" role="document">
