@@ -16,210 +16,107 @@ import Papa from 'papaparse';
 import axios from 'axios';
 import anychart from 'anychart';
 import ReactTable from 'react-table';
+import data from './data.json';
 
 var colorScale = anychart.scales.linearColor('#deebf7', '#3182bd')
-
-var dataSet = anychart.data.set([{
-        'id': 'US.MA',
-        'value': 0
-    },
-    {
-        'id': 'US.MN',
-        'value': 1
-    },
-    {
-        'id': 'US.MT',
-        'value': 2
-    },
-    {
-        'id': 'US.ND',
-        'value': 3
-    },
-    {
-        'id': 'US.HI',
-        'value': 4
-    },
-    {
-        'id': 'US.ID',
-        'value': 5
-    },
-    {
-        'id': 'US.WA',
-        'value': 6
-    },
-    {
-        'id': 'US.AZ',
-        'value': 7
-    },
-    {
-        'id': 'US.CA',
-        'value': 8
-    },
-    {
-        'id': 'US.CO',
-        'value': 9
-    },
-    {
-        'id': 'US.NV',
-        'value': 10
-    },
-    {
-        'id': 'US.NM',
-        'value': 11
-    },
-    {
-        'id': 'US.OR',
-        'value': 12
-    },
-    {
-        'id': 'US.UT',
-        'value': 13
-    },
-    {
-        'id': 'US.WY',
-        'value': 14
-    },
-    {
-        'id': 'US.AR',
-        'value': 15
-    },
-    {
-        'id': 'US.IA',
-        'value': 16
-    },
-    {
-        'id': 'US.KS',
-        'value': 17
-    },
-    {
-        'id': 'US.MO',
-        'value': 18
-    },
-    {
-        'id': 'US.NE',
-        'value': 19
-    },
-    {
-        'id': 'US.OK',
-        'value': 20
-    },
-    {
-        'id': 'US.SD',
-        'value': 21
-    },
-    {
-        'id': 'US.LA',
-        'value': 22
-    },
-    {
-        'id': 'US.TX',
-        'value': 23
-    },
-    {
-        'id': 'US.CT',
-        'value': 24
-    },
-    {
-        'id': 'US.NH',
-        'value': 25
-    },
-    {
-        'id': 'US.RI',
-        'value': 26
-    },
-    {
-        'id': 'US.VT',
-        'value': 27
-    },
-    {
-        'id': 'US.AL',
-        'value': 28
-    },
-    {
-        'id': 'US.FL',
-        'value': 29
-    },
-    {
-        'id': 'US.GA',
-        'value': 30
-    },
-    {
-        'id': 'US.MS',
-        'value': 31
-    },
-    {
-        'id': 'US.SC',
-        'value': 32
-    },
-    {
-        'id': 'US.IL',
-        'value': 33
-    },
-    {
-        'id': 'US.IN',
-        'value': 34
-    },
-    {
-        'id': 'US.KY',
-        'value': 35
-    },
-    {
-        'id': 'US.NC',
-        'value': 36
-    },
-    {
-        'id': 'US.OH',
-        'value': 37
-    },
-    {
-        'id': 'US.TN',
-        'value': 38
-    },
-    {
-        'id': 'US.VA',
-        'value': 39
-    },
-    {
-        'id': 'US.WI',
-        'value': 40
-    },
-    {
-        'id': 'US.WV',
-        'value': 41
-    },
-    {
-        'id': 'US.DE',
-        'value': 42
-    },
-    {
-        'id': 'US.MD',
-        'value': 43
-    },
-    {
-        'id': 'US.NJ',
-        'value': 44
-    },
-    {
-        'id': 'US.NY',
-        'value': 45
-    },
-    {
-        'id': 'US.PA',
-        'value': 46
-    },
-    {
-        'id': 'US.ME',
-        'value': 47
-    },
-    {
-        'id': 'US.MI',
-        'value': 48
-    },
-    {
-        'id': 'US.AK',
-        'value': 49
+var newArr = []; // option 0 
+var newArr2 = []; // option 1
+var newArr3 = [];//  option 2
+for(var state in data){
+    var value = data[state][0][state];
+    var value2 = data[state][4][state];
+    var value3 = data[state][47][state];
+	let obj = {
+        id:"US."+abbrState(state,'abbr'),
+        value:value
     }
-]);
+    let obj2 = {
+        id:"US."+abbrState(state,'abbr'),
+        value:value2
+    }
+    let obj3 = {
+        id:"US."+abbrState(state,'abbr'),
+        value:value3
+    }
+    newArr.push(obj);
+    newArr2.push(obj2);
+    newArr3.push(obj3);
+} 
+
+function abbrState(input, to){
+    let i=0;
+    var states = [
+        ['Arizona', 'AZ'],
+        ['Alabama', 'AL'],
+        ['Alaska', 'AK'],
+        ['Arkansas', 'AR'],
+        ['California', 'CA'],
+        ['Colorado', 'CO'],
+        ['Connecticut', 'CT'],
+        ['Delaware', 'DE'],
+        ['District of Columbia','DC'],
+        ['Florida', 'FL'],
+        ['Georgia', 'GA'],
+        ['Hawaii', 'HI'],
+        ['Idaho', 'ID'],
+        ['Illinois', 'IL'],
+        ['Indiana', 'IN'],
+        ['Iowa', 'IA'],
+        ['Kansas', 'KS'],
+        ['Kentucky', 'KY'],
+        ['Louisiana', 'LA'],
+        ['Maine', 'ME'],
+        ['Maryland', 'MD'],
+        ['Massachusetts', 'MA'],
+        ['Michigan', 'MI'],
+        ['Minnesota', 'MN'],
+        ['Mississippi', 'MS'],
+        ['Missouri', 'MO'],
+        ['Montana', 'MT'],
+        ['Nebraska', 'NE'],
+        ['Nevada', 'NV'],
+        ['New Hampshire', 'NH'],
+        ['New Jersey', 'NJ'],
+        ['New Mexico', 'NM'],
+        ['New York', 'NY'],
+        ['North Carolina', 'NC'],
+        ['North Dakota', 'ND'],
+        ['Ohio', 'OH'],
+        ['Oklahoma', 'OK'],
+        ['Oregon', 'OR'],
+        ['Pennsylvania', 'PA'],
+        ['Rhode Island', 'RI'],
+        ['Puerto Rico','PR'],
+        ['South Carolina', 'SC'],
+        ['South Dakota', 'SD'],
+        ['Tennessee', 'TN'],
+        ['Texas', 'TX'],
+        ['Utah', 'UT'],
+        ['Vermont', 'VT'],
+        ['Virginia', 'VA'],
+        ['Washington', 'WA'],
+        ['West Virginia', 'WV'],
+        ['Wisconsin', 'WI'],
+        ['Wyoming', 'WY'],
+    ];
+
+    if (to == 'abbr'){
+        //input = input.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        for(i = 0; i < states.length; i++){
+            if(states[i][0] == input){
+                return(states[i][1]);
+            }
+        }    
+    } else if (to == 'name'){
+        input = input.toUpperCase();
+        for(i = 0; i < states.length; i++){
+            if(states[i][1] == input){
+                return(states[i][0]);
+            }
+        }    
+    }
+}
+
 
 const Plot = createPlotlyComponent(window.Plotly);
 
@@ -229,6 +126,7 @@ class PivotTableUISmartWrapper extends React.PureComponent {
         this.state = { 
             pivotState: props, 
             barchart:[],
+            region:0,
             lineChart:[],
             pieChart:[],
             details:{
@@ -276,7 +174,12 @@ export default class App extends React.Component {
           }
       });
   }
-
+  handleChangeRegion=(event)=>{
+      this.setState({
+          region:event.target.value
+      })
+      console.log(event.target.value);
+  }
   onDrop(files) {
       this.setState({
           mode: "thinking",
@@ -392,7 +295,13 @@ export default class App extends React.Component {
   }
   
   render() {
-    
+
+        var dataSetStateName = 'Population estimates, July 1, 2017,  (V2017)';
+        var dataSetStateName2= 'Population, percent change - April 1, 2010 (estimates base) to July 1, 2017,  (V2017)'
+        var dataSetStateName3 = 'Total retail sales, 2012 ($1,000)'
+        var dataSet =  anychart.data.set(newArr);
+        var dataSet2 =  anychart.data.set(newArr2);
+        var dataSet3 =  anychart.data.set(newArr3);
       const columns = [{
         Header: 'Screen Name',
         accessor: 'screen_name' // String-based value accessors!
@@ -533,15 +442,41 @@ export default class App extends React.Component {
     {this.state.tab===3?
     <div className="col-md-8 col-lg-8 col-sm-12 no-padding">
     <div className="america">
+    <select value={this.state.region} onChange={this.handleChangeRegion} name="region">
+        <option value={0}>Population estimates, July 1, 2017,  (V2017)</option>
+        <option value={1}>Population, percent change - April 1, 2010 (estimates base) to July 1, 2017,  (V2017)</option>
+        <option value={2}>Total retail sales per capita, 2012</option>
+    </select>
+    {this.state.region==0?
         <AnyChart
             width={800}
             height={600}
             type="choropleth"
             colorScale={colorScale}
             data={dataSet}
-            title="USA Census"
+            title={dataSetStateName}
             geoData="anychart.maps.united_states_of_america"
-        />
+        />:''}
+        {this.state.region==1?
+        <AnyChart
+            width={800}
+            height={600}
+            type="choropleth"
+            colorScale={colorScale}
+            data={dataSet2}
+            title={dataSetStateName2}
+            geoData="anychart.maps.united_states_of_america"
+        />:''}
+        {this.state.region==2?
+        <AnyChart
+            width={800}
+            height={600}
+            type="choropleth"
+            colorScale={colorScale}
+            data={dataSet3}
+            title={dataSetStateName3}
+            geoData="anychart.maps.united_states_of_america"
+        />:''}
 
         <div className="col-md-6 no-padding">
             <div className="chart-block">
