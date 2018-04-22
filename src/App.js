@@ -17,6 +17,12 @@ import axios from 'axios';
 import anychart from 'anychart';
 import ReactTable from 'react-table';
 import data from './data.json';
+import { Provider } from 'react-redux'
+//import { createStore } from 'redux'
+import configureStore from './configureStore'
+import CensusApp from './containers/CensusApp';
+
+let store = configureStore()
 
 var colorScale = anychart.scales.linearColor('#deebf7', '#3182bd')
 var newArr = []; // option 0 
@@ -346,6 +352,7 @@ export default class App extends React.Component {
             <li><a className={this.state.tab===2?"sales-team active":"sales-team"} onClick={()=>this.changeTab(2)}>Sales Team Rate <i className="fa fa-user"></i></a></li>
             <li><a className={this.state.tab===3?"regions active":"regions"} onClick={()=>this.changeTab(3)}>Region Charts<i className="fa fa-map-marker"></i></a></li>
             <li><a className={this.state.tab===4?"regions active":"regions"} onClick={()=>this.changeTab(4)}>Social Comparison<i className="fa fa-map-marker"></i></a></li>
+            <li><a className={this.state.tab===5?"regions active":"regions"} onClick={()=>this.changeTab(5)}>US Census<i className="fa fa-map-marker"></i></a></li>
 
         </ul>
         {/*<ul className="period-selector list-unstyled">
@@ -539,6 +546,13 @@ export default class App extends React.Component {
         </div>
         </div>
     </div>:""}
+    {this.state.tab===5?
+
+    <div className="col-md-8 col-lg-8 col-sm-12 no-padding">
+        <Provider store={store}>
+        <CensusApp />
+      </Provider>
+    </div>:''}
 
 <div className="modal" id="aboutDashboardModal"  role="dialog">
     <div className="modal-dialog" role="document">

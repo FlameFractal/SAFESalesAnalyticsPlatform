@@ -1,0 +1,152 @@
+@font-face {
+    font-family: mainfont;
+    src: url('fonts/GothamNarrow-Book.otf');
+}
+
+
+body {
+    background-color: #fff;
+    font-family: mainfont;
+    color: black;
+}
+
+.main h1{
+    text-align: center;
+}
+
+
+.fullw{
+    width: 100%;
+}
+
+.fullh{
+    height: 100%;
+}
+
+.mapstates {
+    fill: #ccc;
+    stroke: #fff;
+  }
+
+  .bubble{
+      stroke: #000;
+    stroke-width: 1;
+}
+
+.greyed-bubble{
+    fill: #000;
+}
+
+  .mapcontainer{
+      
+      width: 100%;
+      max-height: 50%;
+  }
+
+  .histcontainer{
+    margin: 0 auto;
+      width: 50%;
+      height: 50%;
+  }
+
+  .bar{
+    stroke: #000;
+    fill: #fff;
+  }
+  
+  .highlight{
+    fill: #d299fd;
+  }
+
+  .greyed-out{
+    fill: #c5c5c5;
+  }
+
+  .instructs{
+      text-align: center;
+      margin-top: 30px;
+      margin-bottom: 2px;
+  }
+
+  .map-message{
+      background-color: #d299fd;
+      font-size: 2em;
+      width: 80%;
+      margin: 0 auto;
+      text-align: center;
+      color: #fff;
+      border-radius: 3px;
+      margin-top: 17px;
+  }
+
+  .dropdown{
+    text-align: center;
+  }
+
+  .dropdown select{
+      font-size: 1.1em;
+      text-align: center;
+  }
+
+  .histo-title{
+      text-align: center;
+      margin-top: 0;
+  }
+
+  .scatter-container{
+      width: 70%;
+      height: 50%;
+      margin: 0 auto;
+      text-align: center;
+  }
+
+  .scatter-title{
+    text-align: center;
+    margin-top: 1em;
+  }
+
+  .scatter-title p{
+      margin: 0px;
+  }
+
+  .scatter-title select{
+      font-size: 1.1em;
+  }
+
+.input-section{
+    text-align: center;
+}
+
+.input-section select{
+    font-size: 1.2em;
+}
+
+
+
+
+
+
+.axis-title{
+    text-anchor: middle;
+    text-align: center;
+    font-size: 0.8em;
+}
+
+
+@media (min-width: 800px) {
+    .mapcontainer{
+        width: 70%;
+        float: left;
+    }
+
+    .histcontainer{
+        width: 30%;
+        float: left;
+        height: 45%;
+    }
+
+    .scatter-title{
+        clear: both;
+    }
+
+  }
