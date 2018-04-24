@@ -21,6 +21,7 @@ import { Provider } from 'react-redux'
 //import { createStore } from 'redux'
 import configureStore from './configureStore'
 import CensusApp from './containers/CensusApp';
+import  VoiceRecognition from './VoiceRecognition';
 
 let store = configureStore()
 
@@ -142,6 +143,7 @@ class PivotTableUISmartWrapper extends React.PureComponent {
             } 
         };
     }
+    
 
     componentWillReceiveProps(nextProps) {
         this.setState({pivotState: nextProps});
@@ -162,6 +164,9 @@ export default class App extends React.Component {
       this.setState({
           mode: "demo",
           tab:0,
+          start: false,
+          stop: false,
+          finalTranscript:'',
           filename: "Sample Dataset: Tips",
           details:{
             username:'',
@@ -180,6 +185,20 @@ export default class App extends React.Component {
           }
       });
   }
+
+  onEnd = () => {
+    this.setState({ start: false, stop: false })
+  }
+
+  onResult = ({ finalTranscript }) => {
+    const result = finalTranscript
+
+    this.setState({ start: false,finalTranscript:result })
+  }
+  result = (finalTranscript)=>{
+    console.log(finalTranscript);
+  }
+
   handleChangeRegion=(event)=>{
       this.setState({
           region:event.target.value
@@ -325,7 +344,7 @@ export default class App extends React.Component {
       <div>
       <div className="global-shadow"></div>
       <div className="row title-dashboard-panel">
-          <div className="col-lg-8 col-lg-offset-3 dashboard-limitation">
+          <div className="col-lg-8 col-lg-offset-4 dashboard-limitation">
               <h1 className="title">
                   <a className="hidden-lg switcher" ><i className="fa fa-bars"></i></a>
                   Sales Dashboard <span className="bright-text">"SAFE Sales Dashboard"</span>
@@ -353,6 +372,7 @@ export default class App extends React.Component {
             <li><a className={this.state.tab===3?"regions active":"regions"} onClick={()=>this.changeTab(3)}>Region Charts<i className="fa fa-map-marker"></i></a></li>
             <li><a className={this.state.tab===4?"regions active":"regions"} onClick={()=>this.changeTab(4)}>Social Comparison<i className="fa fa-map-marker"></i></a></li>
             <li><a className={this.state.tab===5?"regions active":"regions"} onClick={()=>this.changeTab(5)}>US Census<i className="fa fa-map-marker"></i></a></li>
+            <li><a className={this.state.tab===6?"regions active":"regions"} onClick={()=>this.changeTab(6)}>Voice Interation<i className="fa fa-map-marker"></i></a></li>
 
         </ul>
         {/*<ul className="period-selector list-unstyled">
@@ -533,7 +553,7 @@ export default class App extends React.Component {
         <button onClick={this.getSocialData} className="btn" >Submit</button>
         <div className="row">
         <div className="col-md-12 col-lg-12 col-sm-12 no-padding">
-        <h3>Twitter Profile Details</h3>
+            <h3>Twitter Profile Details</h3>
             <ReactTable
                 defaultPageSize={1}
                 minRows={1}
@@ -553,6 +573,23 @@ export default class App extends React.Component {
         <CensusApp />
       </Provider>
     </div>:''}
+    {this.state.tab===6?
+        <div className="col-md-8 col-lg-8 col-sm-12 no-padding">
+        <button onClick={() => this.setState({ start: true })}>start</button>
+        <button onClick={() => this.setState({ stop: true })}>stop</button>
+        <h3>{this.state.finalTranscript}</h3>
+        {this.state.finalTranscript === 'revenue chart of US'?
+        <AnyChart id="revenue" legend={this.state.legend} width={700} height={500} title="Revenue Chart" type="column" 
+        data={this.state.barchart}/>:''}
+        {this.state.start && (
+          <VoiceRecognition
+            onResult={this.onResult}
+            continuous={true}
+            lang="en-US"
+            stop={this.state.stop}
+          />
+        )}
+        </div>:""}
 
 <div className="modal" id="aboutDashboardModal"  role="dialog">
     <div className="modal-dialog" role="document">
