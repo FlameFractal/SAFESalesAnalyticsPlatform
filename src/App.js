@@ -33,7 +33,7 @@ for(var state in data){
     var value = data[state][0][state];
     var value2 = data[state][4][state];
     var value3 = data[state][47][state];
-	let obj = {
+  let obj = {
         id:"US."+abbrState(state,'abbr'),
         value:value
     }
@@ -289,6 +289,15 @@ export default class App extends React.Component {
         });*/
     }
   }
+  custom_charts=()=>{
+    window.drawtop10regions();
+    window.drawtop10customers();
+    window.drawtop10categories();
+    window.drawSalesByMonth();
+    window.drawMap();
+    window.drawSalesByMonthArea();
+    // window.drawtop10categoriesradar();
+  }
   handleChange=(event)=>{
       console.log('hey')
       let state = this.state
@@ -317,6 +326,9 @@ export default class App extends React.Component {
       this.setState({
           tab:tab
       })
+  }
+
+  componentDidMount() {
   }
   
   render() {
@@ -367,8 +379,8 @@ export default class App extends React.Component {
     <div className="menu-wrapper">
         <ul className="list-unstyled">
             <li><a className={this.state.tab===0?"general active":"general"} onClick={()=>this.changeTab(0)}>Upload Data <i className="fa fa-bookmark"></i></a></li>
-            <li><a className={this.state.tab===1?"products active":"products"} onClick={()=>this.changeTab(1)}>Sales charts <i className="fa fa-shopping-cart"></i></a></li>
-            <li><a className={this.state.tab===2?"sales-team active":"sales-team"} onClick={()=>this.changeTab(2)}>Sales Team Rate <i className="fa fa-user"></i></a></li>
+            <li><a className={this.state.tab===1?"products active":"products"} onClick={()=>this.changeTab(1)}>Smart Visualisations <i className="fa fa-shopping-cart"></i></a></li>
+            <li><a className={this.state.tab===2?"sales-team active":"sales-team"} onClick={()=>{this.custom_charts();this.changeTab(2)}}>Custom Charts<i className="fa fa-user"></i></a></li>
             <li><a className={this.state.tab===3?"regions active":"regions"} onClick={()=>this.changeTab(3)}>Region Charts<i className="fa fa-map-marker"></i></a></li>
             <li><a className={this.state.tab===4?"regions active":"regions"} onClick={()=>this.changeTab(4)}>Social Comparison<i className="fa fa-map-marker"></i></a></li>
             <li><a className={this.state.tab===5?"regions active":"regions"} onClick={()=>this.changeTab(5)}>US Census<i className="fa fa-map-marker"></i></a></li>
@@ -432,38 +444,16 @@ export default class App extends React.Component {
         
     <div className="col-md-8 col-lg-8 col-sm-12 no-padding">
         <div className="row">
-            <div className="col-md-5 col-lg-5 col-sm-12">
-             <AnyChart id="pie" width={400} height={500} title="Tab1 chart" type="pie" data={[5, 3, 3, 5]}/>
-            </div>
-            <div className="col-md-5 col-lg-5 col-sm-12">
-             <AnyChart id="line" width={400} height={500} title="Tab3 chart" type="line" data={"P1,5\nP2,3\nP3,6\nP4,4"}/>
-            </div>
-        </div>
-        <div className="row">
-            <AnyChart id="revenue" legend={this.state.legend} width={700} height={500} title="Revenue Chart" type="column" 
-        data={this.state.barchart}/>
-        </div>
-        <div className="chart-block">
-            <h2 className="chart-title">Sales Team Rating</h2>
-            <div id="sales-team-chart" data-height="500" className="chart"></div>
-        </div>
-        <div className="chart-block">
-            <h2 className="chart-title">Revenue trend for <span className="person-name"></span></h2>
-            <div id="sales-for-person" className="chart" data-height="248"></div>
-        </div>
-        <div className="row">
-            <div className="col-sm-6">
-                <div className="chart-block">
-                    <h2 className="chart-title">Share of total <br/><span className="person-name"></span></h2>
-                    <div id="total_share_for_person" className="chart" data-height="180"></div>
-                </div>
-            </div>
-            <div className="col-sm-6">
-                <div className="chart-block">
-                    <h2 className="chart-title">Win Ratio <br/> <span className="person-name"></span></h2>
-                    <div id="win_ratio_for_person" className="chart" data-height="180"></div>
-                </div>
-            </div>
+
+            <div id="top10regions" class="chart-containers"></div>
+            <div id="top10customers" class="chart-containers"></div>
+            <div id="top10categories" class="chart-containers"></div>
+            <div id="salesByMonth" class="chart-containers"></div>
+            <div id="map" class="chart-containers"></div>
+            <div id="salesByMonthArea" class="chart-containers"></div>
+            <div id="top10categoriesradar" class="chart-containers"></div>
+
+
         </div>
     </div>:''}
     {this.state.tab===3?
