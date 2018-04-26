@@ -445,12 +445,50 @@ export default class App extends React.Component {
     <div className="col-md-8 col-lg-8 col-sm-12 no-padding">
         <div className="row">
 
-            <div id="top10regions" class="chart-containers"></div>
-            <div id="top10customers" class="chart-containers"></div>
-            <div id="top10categories" class="chart-containers"></div>
-            <div id="salesByMonth" class="chart-containers"></div>
-            <div id="map" class="chart-containers"></div>
-            <div id="salesByMonthArea" class="chart-containers"></div>
+
+            <div class="row">
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                  <div class="chart-containers">
+                     <div id="top10regions" class="chart"></div>
+                  </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                  <div class="chart-containers">
+                      <div id="top10customers" class="chart"></div>
+                  </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-sm-6 ">
+                  <div class="chart-containers">
+                      <div id="top10categories" class="chart"></div>
+                  </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                  <div class="chart-containers">
+                    <div id="salesByMonthArea" class="chart-containers"></div>
+                  </div>
+              </div>
+              <div class="col-lg-3 col-md-6 col-sm-6">
+                  <div class="chart-containers">
+                    <div id="salesByMonth" class="chart-containers"></div>
+                  </div>
+              </div>
+            </div>
+             
+
+
+            <div class="row">
+              <div class="col-lg-6 col-md-8 col-sm-8">
+                  <div class="chart-containers">
+                    <div id="map" class="chart-containers"></div>
+                  </div>
+              </div>
+            </div>
+            
+
+
             <div id="top10categoriesradar" class="chart-containers"></div>
 
 

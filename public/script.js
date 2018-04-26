@@ -139,47 +139,46 @@ function drawtop10categories(){
 function drawSalesByMonth(){
 	
 	var salesByMonth = anychart.column();
+
+
 	
 	// count orders for each state in a dictionary object
-	arr = {"January":0, "February":0, "March":0, "April":0, "May":0, "June":0, "July":0, "August":0, "September":0, "October":0, "November":0, "December":0} // this will make sure object keys remains in this order for plotting purpose, instead of haphazard or sorted
+	arr = {"January":[0,0], "February":[0,0], "March":[0,0], "April":[0,0], "May":[0,0], "June":[0,0], "July":[0,0], "August":[0,0], "September":[0,0], "October":[0,0], "November":[0,0], "December":[0,0]} // this will make sure object keys remains in this order for plotting purpose, instead of haphazard or sorted
 	arr2 = []		
 	monthNames={01:"January", 02:"February", 03:"March", 04:"April", 05:"May", 06:"June", 07:"July", 08:"August", 09:"September", 10:"October", 11:"November", 12:"December"}
 	$.each(superStoreData,function(){				// data variable is included from json file 
 		month = monthNames[parseInt(this["Order Date"][3]+this["Order Date"][4])] // extract month from order date
-		arr[month] += this["Sales"] // remove the decimal part of Sales
+		arr[month][0] += this["Sales"] // remove the decimal part of Sales
+		arr[month][1] += this["Profit"] // remove the decimal part of Sales
 	})
 	
 	// connvert it to arrays for anychart's format
 	for (var k in arr) {
-		arr2.push({x:k,value:arr[k]});
+		arr2.push([k,arr[k][0], arr[k][1]]);
 	}
 
 	// set the data
 	var dataSet = anychart.data.set(arr2)
+	var scale = anychart.scales.linear();
 
 	// create column series
-	var columnSeriesData = dataSet.mapAs({
-		'x': 0,
-		'value': 1
-	});
-	var columnSeries = salesByMonth.column(columnSeriesData);
+	var lineSeriesData = dataSet.mapAs({'x': 0,'value': 1});
+	var lineSeriesData2 = dataSet.mapAs({'x': 0,'value': 2});
 	
 	// create line series
-	var lineSeriesData = dataSet.mapAs({
-		'x': 0,
-		'value': 1
-	});
-	var scale = anychart.scales.linear();
 	var lineSeries = salesByMonth.spline(lineSeriesData);
-	lineSeries.name('Line').yScale(scale).stroke('2.5 #ef6c00');
+	var lineSeries2 = salesByMonth.splineArea(lineSeriesData2);
 
-	salesByMonth.title("Revenue");
+	lineSeries.name('Total Sales: $').yScale(scale).stroke('2.5 #ef6c00');
+	lineSeries2.name('Total Profits: $').yScale(scale).stroke('2.5 #ef6c00');
+
+	salesByMonth.title('Sales VS Profits by Month');
 	salesByMonth.container("salesByMonth");
-
+	salesByMonth.interactivity().hoverMode('by-x');
 	salesByMonth.tooltip().displayMode('union');
-	salesByMonth.tooltip().useHtml(true).format(function () {
-        return 'Total Sales: $'+ parseInt(this.value).toLocaleString();
-	});
+	// salesByMonth.tooltip().useHtml(true).format(function () {
+ //        return 'Total Sales: $'+ parseInt(this.value).toLocaleString();
+	// });
 	// salesByMonth.animation(true)
 
 	salesByMonth.draw();
@@ -210,11 +209,17 @@ function drawMap(){
 	series.labels(false);
 	series.colorScale(anychart.scales.linearColor('#FFEBD6','#C40A0A'));
 	map.container('map');
+	map.title('Sales Choropleth Geomap & Census Data');
 	series.tooltip().useHtml(true).format(function (e) {
 		stateName = codeToStateName[e.getData("id").replace("US.", "")]
-		incomeFact = 50
-		return 'Total Sales: $' + parseInt(e.getData("value")).toLocaleString() + "<br>"
-			+ censusData[stateName][incomeFact]["Fact"] + ": " + censusData[stateName][incomeFact][stateName]
+
+		populationEstimateFact = 0, femaleFact = 13, incomeFact = 50, employmentFact = 54
+
+		return 'Total Sales: $' + parseInt(e.getData("value")).toLocaleString() +""
+			+"<br>"+ censusData[stateName][populationEstimateFact]["Fact"] + ": " + censusData[stateName][populationEstimateFact][stateName]
+			+"<br>"+ censusData[stateName][femaleFact]["Fact"] + ": " + censusData[stateName][femaleFact][stateName]
+			+"<br>"+ censusData[stateName][incomeFact]["Fact"] + ": " + censusData[stateName][incomeFact][stateName]
+			+"<br>"+ censusData[stateName][employmentFact]["Fact"] + ": " + censusData[stateName][employmentFact][stateName]
 				
 	});
 
@@ -261,7 +266,7 @@ function drawSalesByMonthArea() {
 	// var lineSeries = salesByMonth.spline(lineSeriesData);
 	// lineSeries.name('Line').yScale(scale).stroke('2.5 #ef6c00');
 
-	salesByMonthArea.title("Revenue");
+	salesByMonthArea.title("Sales By Month - Area Chart");
 	salesByMonthArea.container("salesByMonthArea");
 
 	salesByMonthArea.tooltip().displayMode('union');
