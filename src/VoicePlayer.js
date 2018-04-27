@@ -86,7 +86,6 @@ class VoicePlayer extends Component {
 
     this.speech.addEventListener('end', () => {
       this.setState({ started: false })
-      this.props.onEnd()
     })
 
     if (this.props.play) {

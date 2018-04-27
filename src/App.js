@@ -22,6 +22,8 @@ import { Provider } from 'react-redux'
 import configureStore from './configureStore'
 import CensusApp from './containers/CensusApp';
 import  VoiceRecognition from './VoiceRecognition';
+import VoicePlayer from './VoicePlayer';
+import FontAwesome from 'react-fontawesome';
 
 let store = configureStore()
 
@@ -166,8 +168,10 @@ export default class App extends React.Component {
           tab:0,
           start: false,
           stop: false,
-          finalTranscript:'',
+          finalTranscript:'Hello! What can I do for you today?',
+          text:'Hello! What can I do for you today?',
           filename: "Sample Dataset: Tips",
+          voice:true,
           details:{
             username:'',
             twitter:[],
@@ -187,13 +191,32 @@ export default class App extends React.Component {
   }
 
   onEnd = () => {
-    this.setState({ start: false, stop: false })
+    console.log('recognition ends');
+    this.setState({ start: false, stop: false,voice:true })
   }
-
+  voiceOnEnd = () =>{
+      console.log('voice ends');
+      this.setState({
+          voice:false
+      })
+  }
   onResult = ({ finalTranscript }) => {
-    const result = finalTranscript
+    const result = finalTranscript;
 
+    if(result==='plot a bar chart'){
+        this.setState({text:'Between which paramters' });
+    }
+    else if(result==='profit and region'){
+        this.setState({text:'Here is a Bar Chart between profit and region' });
+    }
     this.setState({ start: false,finalTranscript:result })
+  }
+  startButton = () => {
+    this.setState({ start: true,voice:false});
+  }
+  stopButton =()=>{
+    this.setState({ stop: true });
+    setTimeout(()=>this.setState({voice:true}),1000);
   }
   result = (finalTranscript)=>{
     console.log(finalTranscript);
@@ -320,7 +343,6 @@ export default class App extends React.Component {
   }
   
   render() {
-
         var dataSetStateName = 'Population estimates, July 1, 2017,  (V2017)';
         var dataSetStateName2= 'Population, percent change - April 1, 2010 (estimates base) to July 1, 2017,  (V2017)'
         var dataSetStateName3 = 'Total retail sales, 2012 ($1,000)'
@@ -366,13 +388,13 @@ export default class App extends React.Component {
 <div className="col-lg-3 no-print">
     <div className="menu-wrapper">
         <ul className="list-unstyled">
-            <li><a className={this.state.tab===0?"general active":"general"} onClick={()=>this.changeTab(0)}>Upload Data <i className="fa fa-bookmark"></i></a></li>
+            <li><a className={this.state.tab===0?"general active":"general"} onClick={()=>this.changeTab(0)}>Upload Data <i className="fa fa-upload"></i></a></li>
             <li><a className={this.state.tab===1?"products active":"products"} onClick={()=>this.changeTab(1)}>Sales charts <i className="fa fa-shopping-cart"></i></a></li>
-            <li><a className={this.state.tab===2?"sales-team active":"sales-team"} onClick={()=>this.changeTab(2)}>Sales Team Rate <i className="fa fa-user"></i></a></li>
-            <li><a className={this.state.tab===3?"regions active":"regions"} onClick={()=>this.changeTab(3)}>Region Charts<i className="fa fa-map-marker"></i></a></li>
-            <li><a className={this.state.tab===4?"regions active":"regions"} onClick={()=>this.changeTab(4)}>Social Comparison<i className="fa fa-map-marker"></i></a></li>
-            <li><a className={this.state.tab===5?"regions active":"regions"} onClick={()=>this.changeTab(5)}>US Census<i className="fa fa-map-marker"></i></a></li>
-            <li><a className={this.state.tab===6?"regions active":"regions"} onClick={()=>this.changeTab(6)}>Voice Interation<i className="fa fa-map-marker"></i></a></li>
+            <li><a className={this.state.tab===2?"sales-team active":"sales-team"} onClick={()=>this.changeTab(2)}>Sales Team Rate <i className="fa fa-signal"></i></a></li>
+            <li><a className={this.state.tab===3?"regions active":"regions"} onClick={()=>this.changeTab(3)}>Region Charts<i className="fa fa-map"></i></a></li>
+            <li><a className={this.state.tab===4?"regions active":"regions"} onClick={()=>this.changeTab(4)}>Social Comparison<i className="fa fa-twitter"></i></a></li>
+            <li><a className={this.state.tab===5?"regions active":"regions"} onClick={()=>this.changeTab(5)}>US Census<i className="fa fa-percent"></i></a></li>
+            <li><a className={this.state.tab===6?"regions active":"regions"} onClick={()=>this.changeTab(6)}>Voice Interaction<i className="fa fa-microphone"></i></a></li>
 
         </ul>
         {/*<ul className="period-selector list-unstyled">
@@ -568,19 +590,46 @@ export default class App extends React.Component {
     </div>:""}
     {this.state.tab===5?
 
-    <div className="col-md-8 col-lg-8 col-sm-12 no-padding">
-        <Provider store={store}>
-        <CensusApp />
-      </Provider>
-    </div>:''}
+        <div className="col-md-8 col-lg-8 col-sm-12 no-padding">
+            <Provider store={store}>
+            <CensusApp />
+        </Provider>
+        </div>:''}
     {this.state.tab===6?
         <div className="col-md-8 col-lg-8 col-sm-12 no-padding">
-        <button onClick={() => this.setState({ start: true })}>start</button>
-        <button onClick={() => this.setState({ stop: true })}>stop</button>
+        <div className="interaction-container">
+
+        {this.state.finalTranscript == 'profit and region'?
+        <AnyChart id="revenue" 
+            legend={this.state.legend} 
+            width={700}
+            height={500} 
+            title="Revenue Chart in USD" type="column" 
+            data={this.state.barchart}
+        />:''}
+
+        {this.state.voice&&<VoicePlayer
+            play
+            text={this.state.text}
+            onEnd={this.voiceOnEnd}
+        />}
+        
         <h3>{this.state.finalTranscript}</h3>
-        {this.state.finalTranscript === 'revenue chart of US'?
-        <AnyChart id="revenue" legend={this.state.legend} width={700} height={500} title="Revenue Chart" type="column" 
-        data={this.state.barchart}/>:''}
+        <div className="btn-container">
+            <button className="hello" onClick={this.startButton}>
+                <FontAwesome
+                    name='microphone'
+                    style={{ color: '#2d5dbe' }}
+                />
+            </button>
+            <button className="hello" onClick={this.stopButton}>
+                <FontAwesome
+                    name='stop'
+                    style={{ color: '#2d5dbe' }}
+                />    
+            </button>
+        </div>
+        </div>
         {this.state.start && (
           <VoiceRecognition
             onResult={this.onResult}
