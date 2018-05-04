@@ -333,6 +333,9 @@ export default class App extends React.Component {
   
   render() {
 
+    var dashStyle = {height: "250px"}
+    var dashStyle2 = {height: "450px"}
+
         var dataSetStateName = 'Population estimates, July 1, 2017,  (V2017)';
         var dataSetStateName2= 'Population, percent change - April 1, 2010 (estimates base) to July 1, 2017,  (V2017)'
         var dataSetStateName3 = 'Total retail sales, 2012 ($1,000)'
@@ -379,8 +382,8 @@ export default class App extends React.Component {
     <div className="menu-wrapper">
         <ul className="list-unstyled">
             <li><a className={this.state.tab===0?"general active":"general"} onClick={()=>this.changeTab(0)}>Upload Data <i className="fa fa-bookmark"></i></a></li>
-            <li><a className={this.state.tab===1?"products active":"products"} onClick={()=>this.changeTab(1)}>Smart Visualisations <i className="fa fa-shopping-cart"></i></a></li>
-            <li><a className={this.state.tab===2?"sales-team active":"sales-team"} onClick={()=>{this.custom_charts();this.changeTab(2)}}>Custom Charts<i className="fa fa-user"></i></a></li>
+            <li><a className={this.state.tab===1?"products active":"products"} onClick={()=>this.changeTab(1)}>Custom Visualisations <i className="fa fa-shopping-cart"></i></a></li>
+            <li><a className={this.state.tab===2?"sales-team active":"sales-team"} onClick={()=>{this.custom_charts();this.changeTab(2)}}>Smart Dashboard<i className="fa fa-user"></i></a></li>
             <li><a className={this.state.tab===3?"regions active":"regions"} onClick={()=>this.changeTab(3)}>Region Charts<i className="fa fa-map-marker"></i></a></li>
             <li><a className={this.state.tab===4?"regions active":"regions"} onClick={()=>this.changeTab(4)}>Social Comparison<i className="fa fa-map-marker"></i></a></li>
             <li><a className={this.state.tab===5?"regions active":"regions"} onClick={()=>this.changeTab(5)}>US Census<i className="fa fa-map-marker"></i></a></li>
@@ -446,50 +449,35 @@ export default class App extends React.Component {
         <div className="row">
 
 
-            <div class="row">
-              <div class="col-lg-3 col-md-6 col-sm-6">
-                  <div class="chart-containers">
-                     <div id="top10regions" class="chart"></div>
-                  </div>
+            <div className="row">
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                 <div id="top10regions" style={dashStyle}></div>
+                </div>
+              <div className="col-lg-4 col-md-6 col-sm-12">
+                <div id="top10customers" style={dashStyle}></div>
               </div>
-              <div class="col-lg-3 col-md-6 col-sm-6">
-                  <div class="chart-containers">
-                      <div id="top10customers" class="chart"></div>
-                  </div>
-              </div>
-              <div class="col-lg-3 col-md-6 col-sm-6 ">
-                  <div class="chart-containers">
-                      <div id="top10categories" class="chart"></div>
-                  </div>
+              <div className="col-lg-4 col-md-6 col-sm-12">
+                <div id="top10categories" style={dashStyle}></div>
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-lg-3 col-md-6 col-sm-6">
-                  <div class="chart-containers">
-                    <div id="salesByMonthArea" class="chart-containers"></div>
-                  </div>
+            <div className="row">
+              <div className="col-lg-6 col-md-6 col-sm-6">
+                <div id="salesByMonthArea" style={dashStyle}></div>
               </div>
-              <div class="col-lg-3 col-md-6 col-sm-6">
-                  <div class="chart-containers">
-                    <div id="salesByMonth" class="chart-containers"></div>
-                  </div>
+              <div class="col-lg-6 col-md-6 col-sm-6">
+                <div id="salesByMonth" style={dashStyle}></div>
               </div>
             </div>
              
 
-
-            <div class="row">
-              <div class="col-lg-6 col-md-8 col-sm-8">
-                  <div class="chart-containers">
-                    <div id="map" class="chart-containers"></div>
-                  </div>
+            <div className="row">
+              <div className="col-lg-12 col-md-8 col-sm-8">
+                <div id="map" style={dashStyle2}></div>
               </div>
             </div>
             
 
-
-            <div id="top10categoriesradar" class="chart-containers"></div>
 
 
         </div>
