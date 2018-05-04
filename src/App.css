@@ -108,17 +108,18 @@ ul.list-default{
   color: #A8A8A8;
 }
 .bright-text {
-  color: #212121;
+  color: #fff;
 }
 
 h1.title {
+  font-family: Arial, Helvetica, sans-serif;
   text-align: left;
-  font-size: 20px;
-  line-height: 30px;
+  font-size: 24px;
+  line-height: 60px;
   margin: 0;
   padding: 0;
   width: 100%;
-  color: #545f69;
+  color: #2e6da4;
 }
 
 .global-shadow {
@@ -147,8 +148,7 @@ hr {
 }
 
 .title-dashboard-panel {
-  background-color: #EBEBEB;
-  border: 1px solid #EAEAEA;
+  background-color: #2e6da4;
   border-radius: 0;
   padding: 7px 20px 7px;
   -webkit-box-shadow: 3px 3px 3px -1px rgba(124, 134, 142, 0.4);
@@ -174,7 +174,7 @@ hr {
   display: block;
   min-height: 100%;
   position: absolute;
-  background-color: #f6f6f6;
+  background-color: #ffffff;
   border: 1px solid #EAEAEA;
   border-radius: 0;
   padding: 20px 0 0 0;
@@ -197,7 +197,7 @@ hr {
 
 .menu-wrapper .compressed li a {
   padding: 0 20px 5px 0;
-  color: #212121;
+  color: #000;
 }
 
 .menu-wrapper .compressed li a:hover {
@@ -214,7 +214,7 @@ hr {
 }
 
 .menu-wrapper li a.active, .menu-wrapper li a.active:hover {
-  background: #7c868e;
+  background: #2e6da4;
   color: #F7F7F7;
   text-decoration: none;
   margin-left: -1px;
