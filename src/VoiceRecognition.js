@@ -19,8 +19,8 @@ class VoiceRecognition extends Component {
 
   createRecognition(SpeechRecognition){
     const defaults = {
-      continuous: true,
-      interimResults: false,
+      continuous: false,
+      // interimResults: true,
       lang: 'en-US'
     }
 

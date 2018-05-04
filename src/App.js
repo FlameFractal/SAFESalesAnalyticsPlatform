@@ -50,7 +50,69 @@ for(var state in data){
     newArr.push(obj);
     newArr2.push(obj2);
     newArr3.push(obj3);
-} 
+}
+
+var superStoreData = window.superStoreData
+
+
+/////////////////////////////////// sales map data
+var arr = [], arr2 = [], salesMapData
+function calcSalesMapData(item) {        // data variable is included from json file 
+  if (arr[item["State"]] === undefined)
+    arr[item["State"]] = item["Sales"]
+  else
+    arr[item["State"]] += item["Sales"]
+}
+superStoreData.forEach(calcSalesMapData) 
+var  stateNameToCode = { "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR", "California": "CA", "Colorado": "CO", "Connecticut": "CT", "Delaware": "DE", "District of Columbia": "DC", "Florida": "FL", "Georgia": "GA", "Hawaii": "HI", "Idaho": "ID", "Illinois": "IL", "Indiana": "IN", "Iowa": "IA", "Kansas": "KS", "Kentucky": "KY", "Louisiana": "LA", "Maine": "ME", "Maryland": "MD", "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN", "Mississippi": "MS", "Missouri": "MO", "Montana": "MT", "Nebraska": "NE", "Nevada": "NV", "New Hampshire": "NH", "New Jersey": "NJ", "New Mexico": "NM", "New York": "NY", "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH", "Oklahoma": "OK", "Oregon": "OR", "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC", "South Dakota": "SD", "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT", "Virginia": "VA", "Washington": "WA", "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY" }
+var  codeToStateName = { "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "DC": "District of Columbia", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming" }
+  // connvert it to arrays in ISO 3188 shortname for anychart's format
+  for (var k in arr) {
+    arr2.push({"id": "US."+stateNameToCode[k], "value": parseInt(arr[k])});
+  }
+salesMapData = arr2
+////////////////////////////////// sales map data
+
+
+////////////////////////////////// profit region data
+var arr = [], arr2 = [], profitRegionData
+function calcProfitRegionData(item) {        // data variable is included from json file 
+  if (arr[item["State"]] === undefined)
+    arr[item["State"]] = item["Profit"]
+  else
+    arr[item["State"]] += item["Profit"]
+}
+superStoreData.forEach(calcProfitRegionData) 
+var  stateNameToCode = { "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR", "California": "CA", "Colorado": "CO", "Connecticut": "CT", "Delaware": "DE", "District of Columbia": "DC", "Florida": "FL", "Georgia": "GA", "Hawaii": "HI", "Idaho": "ID", "Illinois": "IL", "Indiana": "IN", "Iowa": "IA", "Kansas": "KS", "Kentucky": "KY", "Louisiana": "LA", "Maine": "ME", "Maryland": "MD", "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN", "Mississippi": "MS", "Missouri": "MO", "Montana": "MT", "Nebraska": "NE", "Nevada": "NV", "New Hampshire": "NH", "New Jersey": "NJ", "New Mexico": "NM", "New York": "NY", "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH", "Oklahoma": "OK", "Oregon": "OR", "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC", "South Dakota": "SD", "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT", "Virginia": "VA", "Washington": "WA", "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY" }
+var  codeToStateName = { "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "DC": "District of Columbia", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming" }
+  // connvert it to arrays in ISO 3188 shortname for anychart's format
+  for (var k in arr) {
+    arr2.push({"x": k, "value": parseInt(arr[k])});
+  }
+profitRegionData = arr2
+////////////////////////////////// profit region data
+
+
+
+////////////////////////////////// sales region data
+var arr = [], arr2 = [], salesRegionData
+function calcSalesRegionData(item) {        // data variable is included from json file 
+  if (arr[item["State"]] === undefined)
+    arr[item["State"]] = item["Sales"]
+  else
+    arr[item["State"]] += item["Sales"]
+}
+superStoreData.forEach(calcSalesRegionData) 
+var  stateNameToCode = { "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR", "California": "CA", "Colorado": "CO", "Connecticut": "CT", "Delaware": "DE", "District of Columbia": "DC", "Florida": "FL", "Georgia": "GA", "Hawaii": "HI", "Idaho": "ID", "Illinois": "IL", "Indiana": "IN", "Iowa": "IA", "Kansas": "KS", "Kentucky": "KY", "Louisiana": "LA", "Maine": "ME", "Maryland": "MD", "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN", "Mississippi": "MS", "Missouri": "MO", "Montana": "MT", "Nebraska": "NE", "Nevada": "NV", "New Hampshire": "NH", "New Jersey": "NJ", "New Mexico": "NM", "New York": "NY", "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH", "Oklahoma": "OK", "Oregon": "OR", "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC", "South Dakota": "SD", "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT", "Virginia": "VA", "Washington": "WA", "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY" }
+var  codeToStateName = { "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "DC": "District of Columbia", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming" }
+  // connvert it to arrays in ISO 3188 shortname for anychart's format
+  for (var k in arr) {
+    arr2.push({"x": k, "value": parseInt(arr[k])});
+  }
+salesRegionData = arr2
+////////////////////////////////// profit region data
+
+
 
 function abbrState(input, to){
     let i=0;
@@ -127,6 +189,7 @@ function abbrState(input, to){
 }
 
 
+
 const Plot = createPlotlyComponent(window.Plotly);
 
 class PivotTableUISmartWrapper extends React.PureComponent {
@@ -189,37 +252,51 @@ export default class App extends React.Component {
           }
       });
   }
+  
+  toTitleCase = (str) => {
+      return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+  }
+
+  startButton = () => {
+    this.setState({ start: true,voice:false});
+  }
+
+  stopButton =()=>{
+    this.setState({ stop: true });
+    setTimeout(()=>this.setState({voice:true}),1000);
+  }
 
   onEnd = () => {
     console.log('recognition ends');
     this.setState({ start: false, stop: false,voice:true })
   }
+
+  onResult = ({ finalTranscript }) => {
+    const result = finalTranscript;
+    this.setState({ stop: true });
+    setTimeout(()=>this.setState({voice:true}),500);
+
+    if(result.indexOf('bar')>-1){
+        this.setState({text:'Between which parameters'});
+    }
+    else if(result === ('profit and region'))
+        this.setState({text:'Here is a bar graph between profit and region' });
+    else if(result === ('sales and region'))
+        this.setState({text:'Here is a bar graph between sales and region' });
+    else if(result === 'show me the sales map')
+        this.setState({text:'Here is a the sales map' });
+
+    else
+      this.setState({text:'Sorry, i did not understand that command, Try again.' });
+      
+    this.setState({ start: false,finalTranscript:result })
+  }
+
   voiceOnEnd = () =>{
       console.log('voice ends');
       this.setState({
           voice:false
       })
-  }
-  onResult = ({ finalTranscript }) => {
-    const result = finalTranscript;
-
-    if(result==='plot a bar chart'){
-        this.setState({text:'Between which paramters' });
-    }
-    else if(result==='profit and region'){
-        this.setState({text:'Here is a Bar Chart between profit and region' });
-    }
-    this.setState({ start: false,finalTranscript:result })
-  }
-  startButton = () => {
-    this.setState({ start: true,voice:false});
-  }
-  stopButton =()=>{
-    this.setState({ stop: true });
-    setTimeout(()=>this.setState({voice:true}),1000);
-  }
-  result = (finalTranscript)=>{
-    console.log(finalTranscript);
   }
 
   handleChangeRegion=(event)=>{
@@ -386,13 +463,10 @@ export default class App extends React.Component {
           <div className="col-lg-8 col-lg-offset-4 dashboard-limitation">
               <h1 className="title">
                   <a className="hidden-lg switcher" ><i className="fa fa-bars"></i></a>
-                  Sales Dashboard <span className="bright-text">"SAFE Sales Dashboard"</span>
+                  <span className="bright-text">SAFE - Sales Analytics Platform For Enterprises</span>
 
                   <div className="btn-group pull-right submenu">
-                      <a type="button" className="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                          <i className="fa fa-ellipsis-v"></i>
-                      </a>
+                      
                       <ul className="dropdown-menu">
                       </ul>
                   </div>
@@ -409,10 +483,10 @@ export default class App extends React.Component {
             <li><a className={this.state.tab===0?"general active":"general"} onClick={()=>this.changeTab(0)}>Upload Data <i className="fa fa-bookmark"></i></a></li>
             <li><a className={this.state.tab===1?"products active":"products"} onClick={()=>this.changeTab(1)}>Custom Visualisations <i className="fa fa-shopping-cart"></i></a></li>
             <li><a className={this.state.tab===2?"sales-team active":"sales-team"} onClick={()=>{this.custom_charts();this.changeTab(2)}}>Smart Dashboard<i className="fa fa-user"></i></a></li>
-            <li><a className={this.state.tab===3?"regions active":"regions"} onClick={()=>this.changeTab(3)}>Region Charts<i className="fa fa-map-marker"></i></a></li>
+            {/*<li><a className={this.state.tab===3?"regions active":"regions"} onClick={()=>this.changeTab(3)}>Region Charts<i className="fa fa-map-marker"></i></a></li>
             <li><a className={this.state.tab===4?"regions active":"regions"} onClick={()=>this.changeTab(4)}>Social Comparison<i className="fa fa-map-marker"></i></a></li>
-            <li><a className={this.state.tab===5?"regions active":"regions"} onClick={()=>this.changeTab(5)}>US Census<i className="fa fa-map-marker"></i></a></li>
-            <li><a className={this.state.tab===6?"regions active":"regions"} onClick={()=>this.changeTab(6)}>Voice Interation<i className="fa fa-map-marker"></i></a></li>
+            */}<li><a className={this.state.tab===5?"regions active":"regions"} onClick={()=>this.changeTab(5)}>Location Intelligence<i className="fa fa-map-marker"></i></a></li>
+            <li><a className={this.state.tab===6?"regions active":"regions"} onClick={()=>this.changeTab(6)}>Voice Command<i className="fa fa-microphone"></i></a></li>
 
         </ul>
         {/*<ul className="period-selector list-unstyled">
@@ -618,14 +692,6 @@ export default class App extends React.Component {
         <div className="col-md-8 col-lg-8 col-sm-12 no-padding">
         <div className="interaction-container">
 
-        {this.state.finalTranscript == 'profit and region'?
-        <AnyChart id="revenue" 
-            legend={this.state.legend} 
-            width={700}
-            height={500} 
-            title="Revenue Chart in USD" type="column" 
-            data={this.state.barchart}
-        />:''}
 
         {this.state.voice&&<VoicePlayer
             play
@@ -633,7 +699,7 @@ export default class App extends React.Component {
             onEnd={this.voiceOnEnd}
         />}
         
-        <h3>{this.state.finalTranscript}</h3>
+        <h3>{this.toTitleCase(this.state.finalTranscript)}</h3>
         <div className="btn-container">
             <button className="hello" onClick={this.startButton}>
                 <FontAwesome
@@ -641,18 +707,52 @@ export default class App extends React.Component {
                     style={{ color: '#2d5dbe' }}
                 />
             </button>
-            <button className="hello" onClick={this.stopButton}>
+            {/*<button className="hello" onClick={this.stopButton}>
                 <FontAwesome
                     name='stop'
                     style={{ color: '#2d5dbe' }}
                 />    
-            </button>
+            </button>*/}
         </div>
         </div>
+      
+        {this.state.finalTranscript === 'profit and region'?
+        <AnyChart 
+            legend={this.state.legend} 
+            width={1200}
+            height={600} 
+            title="Profit vs Region (in USD)" 
+            type="column" 
+            data={profitRegionData}
+        />:''}
+
+        {this.state.finalTranscript === 'sales and region'?
+        <AnyChart 
+            legend={this.state.legend} 
+            width={1200}
+            height={600} 
+            title="Sales vs Region (in USD)" 
+            type="column" 
+            data={salesRegionData}
+        />:''}
+
+        {this.state.finalTranscript === ('show me the sales map')?
+         <AnyChart
+            width={800}
+            height={600}
+            type="choropleth"
+            colorScale={colorScale}
+            data={salesMapData}
+            title={"Sales Map"}
+            geoData="anychart.maps.united_states_of_america"
+        />:''}
+      
+
+
         {this.state.start && (
           <VoiceRecognition
             onResult={this.onResult}
-            continuous={true}
+            continuous={false}
             lang="en-US"
             stop={this.state.stop}
           />
