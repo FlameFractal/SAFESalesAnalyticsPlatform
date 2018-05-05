@@ -27,7 +27,7 @@ import FontAwesome from 'react-fontawesome';
 
 let store = configureStore()
 
-var colorScale = anychart.scales.linearColor('#deebf7', '#3182bd')
+var colorScales = anychart.scales.linearColor('#deebf7', '#3182bd')
 var newArr = []; // option 0 
 var newArr2 = []; // option 1
 var newArr3 = [];//  option 2
@@ -77,10 +77,10 @@ salesMapData = arr2
 ////////////////////////////////// profit region data
 var arr = [], arr2 = [], profitRegionData
 function calcProfitRegionData(item) {        // data variable is included from json file 
-  if (arr[item["State"]] === undefined)
-    arr[item["State"]] = item["Profit"]
+  if (arr[item["Region"]] === undefined)
+    arr[item["Region"]] = item["Profit"]
   else
-    arr[item["State"]] += item["Profit"]
+    arr[item["Region"]] += item["Profit"]
 }
 superStoreData.forEach(calcProfitRegionData) 
 var  stateNameToCode = { "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR", "California": "CA", "Colorado": "CO", "Connecticut": "CT", "Delaware": "DE", "District of Columbia": "DC", "Florida": "FL", "Georgia": "GA", "Hawaii": "HI", "Idaho": "ID", "Illinois": "IL", "Indiana": "IN", "Iowa": "IA", "Kansas": "KS", "Kentucky": "KY", "Louisiana": "LA", "Maine": "ME", "Maryland": "MD", "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN", "Mississippi": "MS", "Missouri": "MO", "Montana": "MT", "Nebraska": "NE", "Nevada": "NV", "New Hampshire": "NH", "New Jersey": "NJ", "New Mexico": "NM", "New York": "NY", "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH", "Oklahoma": "OK", "Oregon": "OR", "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC", "South Dakota": "SD", "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT", "Virginia": "VA", "Washington": "WA", "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY" }
@@ -91,6 +91,57 @@ var  codeToStateName = { "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR":
   }
 profitRegionData = arr2
 ////////////////////////////////// profit region data
+
+
+
+////////////////////////////////// segment quantity data
+var arr = [], arr2 = [], segmentQuantityData
+function calcSegmentQuantityData(item) {        // data variable is included from json file 
+  if (arr[item["Segment"]] === undefined)
+    arr[item["Segment"]] = item["Quantity"]
+  else
+    arr[item["Segment"]] += item["Quantity"]
+}
+superStoreData.forEach(calcSegmentQuantityData) 
+  // connvert it to arrays in ISO 3188 shortname for anychart's format
+  for (var k in arr) {
+    arr2.push({"x": k, "value": parseInt(arr[k])});
+  }
+segmentQuantityData = arr2
+////////////////////////////////// 
+
+
+////////////////////////////////// discount subcategory data
+var arr = [], arr2 = [], discSubData
+function calcDiscSubData(item) {        // data variable is included from json file 
+  if (arr[item["Sub-Category"]] === undefined)
+    arr[item["Sub-Category"]] = item["Discount"]
+  else
+    arr[item["Sub-Category"]] += item["Discount"]
+}
+superStoreData.forEach(calcDiscSubData) 
+  // connvert it to arrays in ISO 3188 shortname for anychart's format
+  for (var k in arr) {
+    arr2.push({"x": k, "value": parseInt(arr[k])});
+  }
+discSubData = arr2
+////////////////////////////////// 
+
+////////////////////////////////// quantity ship-mode data
+var arr = [], arr2 = [], quantityShipData
+function calcQuantityShipData(item) {        // data variable is included from json file 
+  if (arr[item["Ship Mode"]] === undefined)
+    arr[item["Ship Mode"]] = item["Quantity"]
+  else
+    arr[item["Ship Mode"]] += item["Quantity"]
+}
+superStoreData.forEach(calcQuantityShipData) 
+  // connvert it to arrays in ISO 3188 shortname for anychart's format
+  for (var k in arr) {
+    arr2.push({"x": k, "value": parseInt(arr[k])});
+  }
+quantityShipData = arr2
+////////////////////////////////// 
 
 
 
@@ -111,6 +162,7 @@ var  codeToStateName = { "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR":
   }
 salesRegionData = arr2
 ////////////////////////////////// profit region data
+
 
 
 
@@ -231,8 +283,9 @@ export default class App extends React.Component {
           tab:0,
           start: false,
           stop: false,
-          finalTranscript:'Hello! What can I do for you today?',
+          finalTranscript:'',
           text:'Hello! What can I do for you today?',
+          result:'Hello! What can I do for you today?',
           filename: "Sample Dataset: Tips",
           voice:true,
           details:{
@@ -254,8 +307,36 @@ export default class App extends React.Component {
   }
   
   toTitleCase = (str) => {
+    if (str)
       return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    else
+      return "Err"
   }
+
+
+calcDataAB = (value, parameter) => {
+  value = this.toTitleCase(value)
+  parameter = this.toTitleCase(parameter)
+  console.log("calculating data"+value+parameter)
+  var arr=[],arr2=[]
+  superStoreData.forEach((item) => {
+    if (arr[item[parameter]] === undefined)
+      arr[item[parameter]] = item[value]
+    else
+      arr[item[parameter]] += item[value]
+  }) 
+
+  var  stateNameToCode = { "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR", "California": "CA", "Colorado": "CO", "Connecticut": "CT", "Delaware": "DE", "District of Columbia": "DC", "Florida": "FL", "Georgia": "GA", "Hawaii": "HI", "Idaho": "ID", "Illinois": "IL", "Indiana": "IN", "Iowa": "IA", "Kansas": "KS", "Kentucky": "KY", "Louisiana": "LA", "Maine": "ME", "Maryland": "MD", "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN", "Mississippi": "MS", "Missouri": "MO", "Montana": "MT", "Nebraska": "NE", "Nevada": "NV", "New Hampshire": "NH", "New Jersey": "NJ", "New Mexico": "NM", "New York": "NY", "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH", "Oklahoma": "OK", "Oregon": "OR", "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC", "South Dakota": "SD", "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT", "Virginia": "VA", "Washington": "WA", "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY" }
+  var  codeToStateName = { "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "DC": "District of Columbia", "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas", "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts", "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana", "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico", "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma", "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota", "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington", "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming" }
+    
+  
+    for (var k in arr) {
+      arr2.push({"x": k, "value": parseInt(arr[k])});
+    }      
+  
+  console.log(arr2)
+  return arr2;
+}
 
   startButton = () => {
     this.setState({ start: true,voice:false});
@@ -276,18 +357,12 @@ export default class App extends React.Component {
     this.setState({ stop: true });
     setTimeout(()=>this.setState({voice:true}),500);
 
-    if(result.indexOf('bar')>-1){
-        this.setState({text:'Between which parameters'});
-    }
-    else if(result === ('profit and region'))
-        this.setState({text:'Here is a bar graph between profit and region' });
-    else if(result === ('sales and region'))
-        this.setState({text:'Here is a bar graph between sales and region' });
-    else if(result === 'show me the sales map')
-        this.setState({text:'Here is a the sales map' });
-
+    if(result.indexOf("column")>-1)
+        this.setState({text:'Between which parameters', result:'Between which parameters'});
+    else if(result.indexOf("map")>-1)
+        this.setState({text:'Here is the sales map',text:'Here is the sales map'});
     else
-      this.setState({text:'Sorry, i did not understand that command, Try again.' });
+        this.setState({text:'Here is the column chart between'+(finalTranscript.split(" and ")[0])+' and '+(this.state.finalTranscript.split(" and ")[1]) });
       
     this.setState({ start: false,finalTranscript:result })
   }
@@ -597,7 +672,7 @@ export default class App extends React.Component {
             width={800}
             height={600}
             type="choropleth"
-            colorScale={colorScale}
+            colorScale={colorScales}
             data={dataSet}
             title={dataSetStateName}
             geoData="anychart.maps.united_states_of_america"
@@ -607,7 +682,7 @@ export default class App extends React.Component {
             width={800}
             height={600}
             type="choropleth"
-            colorScale={colorScale}
+            colorScale={colorScales}
             data={dataSet2}
             title={dataSetStateName2}
             geoData="anychart.maps.united_states_of_america"
@@ -617,7 +692,7 @@ export default class App extends React.Component {
             width={800}
             height={600}
             type="choropleth"
-            colorScale={colorScale}
+            colorScale={colorScales}
             data={dataSet3}
             title={dataSetStateName3}
             geoData="anychart.maps.united_states_of_america"
@@ -688,9 +763,16 @@ export default class App extends React.Component {
 
         <div className="col-md-8 col-lg-8 col-sm-12 no-padding">
             <Provider store={store}>
-            <CensusApp />
-        </Provider>
-        </div>:''}
+              <CensusApp />
+            </Provider>
+          <br></br><br></br><br></br>          
+        </div>
+
+
+
+
+
+        :''}
     {this.state.tab===6?
         <div className="col-md-8 col-lg-8 col-sm-12 no-padding">
         <div className="interaction-container">
@@ -702,7 +784,7 @@ export default class App extends React.Component {
             onEnd={this.voiceOnEnd}
         />}
         
-        <h3>{this.toTitleCase(this.state.finalTranscript)}</h3>
+        <h3>{this.toTitleCase(this.state.result)}</h3>
         <div className="btn-container">
             <button className="hello" onClick={this.startButton}>
                 <FontAwesome
@@ -718,38 +800,29 @@ export default class App extends React.Component {
             </button>*/}
         </div>
         </div>
-      
-        {this.state.finalTranscript === 'profit and region'?
-        <AnyChart 
-            legend={this.state.legend} 
-            width={1200}
-            height={600} 
-            title="Profit vs Region (in USD)" 
-            type="column" 
-            data={profitRegionData}
-        />:''}
 
-        {this.state.finalTranscript === 'sales and region'?
-        <AnyChart 
-            legend={this.state.legend} 
-            width={1200}
-            height={600} 
-            title="Sales vs Region (in USD)" 
-            type="column" 
-            data={salesRegionData}
-        />:''}
+         {this.toTitleCase(this.state.finalTranscript)==='Err'?console.log("Errrrrrrr"):''}
 
-        {this.state.finalTranscript === ('show me the sales map')?
+        {this.toTitleCase(this.state.finalTranscript)!='Err' && this.state.finalTranscript.indexOf('column')==-1 && this.state.finalTranscript.indexOf('map')>-1?
          <AnyChart
             width={800}
             height={600}
             type="choropleth"
-            colorScale={colorScale}
+            colorScale={colorScales}
             data={salesMapData}
             title={"Sales Map"}
             geoData="anychart.maps.united_states_of_america"
         />:''}
-      
+
+        {this.toTitleCase(this.state.finalTranscript)!='Err' && this.state.finalTranscript.indexOf('column')==-1 && this.state.finalTranscript.indexOf('map')==-1?
+        <AnyChart 
+            legend={this.state.legend} 
+            width={1200}
+            height={600} 
+            title={""+this.toTitleCase(this.state.finalTranscript.split(" and ")[0])+" VS "+this.toTitleCase(this.state.finalTranscript.split(" and ")[1])}
+            type="column" 
+            data={this.calcDataAB(this.state.finalTranscript.split(" and ")[0], this.state.finalTranscript.split(" and ")[1])}
+        />:''}
 
 
         {this.state.start && (
