@@ -159,7 +159,6 @@ function drawSalesByMonth(){
 
 	// set the data
 	var dataSet = anychart.data.set(arr2)
-	var scale = anychart.scales.linear();
 
 	// create column series
 	var lineSeriesData = dataSet.mapAs({'x': 0,'value': 1});
@@ -169,8 +168,8 @@ function drawSalesByMonth(){
 	var lineSeries = salesByMonth.spline(lineSeriesData);
 	var lineSeries2 = salesByMonth.splineArea(lineSeriesData2);
 
-	lineSeries.name('Total Sales: $').yScale(scale).stroke('2.5 #ef6c00');
-	lineSeries2.name('Total Profits: $').yScale(scale).stroke('2.5 #ef6c00');
+	lineSeries.name('Total Sales: $').stroke('2.5 #ef6c00');
+	lineSeries2.name('Total Profits: $').stroke('2.5 #ef6c00');
 
 	salesByMonth.title('Sales VS Profits by Month');
 	salesByMonth.container("salesByMonth");
@@ -229,7 +228,7 @@ function drawMap(){
 
 function drawSalesByMonthArea() {
 
-	var salesByMonthArea = anychart.area();
+	var salesByMonthArea = anychart.bar();
 
 	// count orders for each state in a dictionary object
 	arr = { "January": 0, "February": 0, "March": 0, "April": 0, "May": 0, "June": 0, "July": 0, "August": 0, "September": 0, "October": 0, "November": 0, "December": 0 } // this will make sure object keys remains in this order for plotting purpose, instead of haphazard or sorted
@@ -246,7 +245,7 @@ function drawSalesByMonthArea() {
 	}
 
 	// set the data
-	var series = salesByMonthArea.stepArea(arr2);
+	var series = salesByMonthArea.bar(arr2);
 	
 	
 	// var dataSet = anychart.data.set(arr2)
@@ -266,7 +265,7 @@ function drawSalesByMonthArea() {
 	// var lineSeries = salesByMonth.spline(lineSeriesData);
 	// lineSeries.name('Line').yScale(scale).stroke('2.5 #ef6c00');
 
-	salesByMonthArea.title("Sales By Month - Area Chart");
+	salesByMonthArea.title("Sales By Month - Bar");
 	salesByMonthArea.container("salesByMonthArea");
 
 	salesByMonthArea.tooltip().displayMode('union');

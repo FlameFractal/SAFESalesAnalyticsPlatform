@@ -390,13 +390,15 @@ export default class App extends React.Component {
     }
   }
   custom_charts=()=>{
-    window.drawtop10regions();
-    window.drawtop10customers();
-    window.drawtop10categories();
-    window.drawSalesByMonth();
-    window.drawMap();
-    window.drawSalesByMonthArea();
-    // window.drawtop10categoriesradar();
+    setTimeout(()=>{
+      window.drawtop10regions();
+      window.drawtop10customers();
+      window.drawtop10categories();
+      window.drawSalesByMonth();
+      window.drawMap();
+      window.drawSalesByMonthArea();
+      // window.drawtop10categoriesradar();  
+    },100);
   }
   handleChange=(event)=>{
       console.log('hey')
@@ -549,7 +551,7 @@ export default class App extends React.Component {
 
 
             <div className="row">
-              <div class="col-lg-4 col-md-6 col-sm-12">
+              <div className="col-lg-4 col-md-6 col-sm-12">
                  <div id="top10regions" style={dashStyle}></div>
                 </div>
               <div className="col-lg-4 col-md-6 col-sm-12">
@@ -564,7 +566,7 @@ export default class App extends React.Component {
               <div className="col-lg-6 col-md-6 col-sm-6">
                 <div id="salesByMonthArea" style={dashStyle}></div>
               </div>
-              <div class="col-lg-6 col-md-6 col-sm-6">
+              <div className="col-lg-6 col-md-6 col-sm-6">
                 <div id="salesByMonth" style={dashStyle}></div>
               </div>
             </div>
