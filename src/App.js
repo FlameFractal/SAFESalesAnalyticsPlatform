@@ -482,12 +482,13 @@ export default class App extends React.Component {
     <div className="menu-wrapper">
         <ul className="list-unstyled">
 
-            <li><a className={this.state.tab===0?"general active":"general"} onClick={()=>this.changeTab(0)}>Upload Data <i className="fa fa-bookmark"></i></a></li>
-            <li><a className={this.state.tab===1?"products active":"products"} onClick={()=>this.changeTab(1)}>Custom Visualisations <i className="fa fa-shopping-cart"></i></a></li>
-            <li><a className={this.state.tab===2?"sales-team active":"sales-team"} onClick={()=>{this.custom_charts();this.changeTab(2)}}>Smart Dashboard<i className="fa fa-user"></i></a></li>
+            <li><a className={this.state.tab===0?"general active":"general"} onClick={()=>this.changeTab(0)}>Upload Data <i className="fa fa-files-o"></i></a></li>
+            <li><a className={this.state.tab===1?"products active":"products"} onClick={()=>this.changeTab(1)}>Custom Visualisations <i className="fa fa-wrench"></i></a></li>
+            <li><a className={this.state.tab===2?"sales-team active":"sales-team"} onClick={()=>{this.custom_charts();this.changeTab(2)}}>Smart Dashboard<i className="fa fa-line-chart"></i></a></li>
             {/*<li><a className={this.state.tab===3?"regions active":"regions"} onClick={()=>this.changeTab(3)}>Region Charts<i className="fa fa-map-marker"></i></a></li>
             <li><a className={this.state.tab===4?"regions active":"regions"} onClick={()=>this.changeTab(4)}>Social Comparison<i className="fa fa-map-marker"></i></a></li>
             */}<li><a className={this.state.tab===5?"regions active":"regions"} onClick={()=>this.changeTab(5)}>Location Intelligence<i className="fa fa-map-marker"></i></a></li>
+            <li><a href="test.html" target="_blank" className={this.state.tab===7?"regions active":"regions"} onClick={()=>this.changeTab(7)}>Insights and Predictions<i className="fa fa-signal"></i></a></li>
             <li><a className={this.state.tab===6?"regions active":"regions"} onClick={()=>this.changeTab(6)}>Voice Command<i className="fa fa-microphone"></i></a></li>
 
         </ul>
